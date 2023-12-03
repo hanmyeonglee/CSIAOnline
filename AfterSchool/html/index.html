@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon" href="../image/favicon.png">
+    <style>
+        html{
+            overflow: hidden;
+        }
+
+        body{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #LoadingLogo{
+            z-index: 999;
+            animation-name: flinch;
+            animation-duration: 0.5s;
+        }
+
+        #LoadingLogo, #gradientWaveCover{
+            aspect-ratio: 1/1;
+            position: absolute;
+            top: 46%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #gradientWave{
+            width: 100%;
+            aspect-ratio: 1/1;
+            transition: all 0.5s ease-in-out 0s;
+            background-image: radial-gradient(#1776bd, white);
+            border-radius: 50%;
+        }
+
+        @media (min-aspect-ratio:1/1){
+            #LoadingLogo, #gradientWaveCover{
+                width: 12vw;
+            }
+        }
+
+        @media (max-aspect-ratio:1/1){
+            #LoadingLogo, #gradientWaveCover{
+                height: 19.5vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="../image/favicon.png" alt="CSIA Online Logo" id="LoadingLogo">
+    <div id="gradientWaveCover">
+        <div id="gradientWave"></div>
+    </div>
+    <script>
+        /**
+         * @param time : type = int, ms 단위의 숫자이다. 이 숫자 간격만큼 텀을 두고 실행된다.
+         * 
+         * 로고 주변에 splash를 만든다.
+         */
+        const splash = (time) => {
+            let wave = document.getElementById("gradientWave");
+            setTimeout(() => {
+                wave.style.transition = "all 0.5s ease-in-out 0s";
+                wave.style.transform = "scale(1.45)";
+                wave.style.opacity = 0;
+                setTimeout(() => {
+                    wave.style.transition = "all 0s linear 0s";
+                    wave.style.transform = "scale(1)";
+                    wave.style.opacity = 1;
+                }, 600);
+            }, time);
+        }
+
+        for(let i = 0 ; i < 2 ; i++){
+            splash(700 + 800 * i);
+        }
+
+        setTimeout(() => {
+            location.href = "./login.html";
+        }, 1900);
+    </script>
+</body>
+</html>
