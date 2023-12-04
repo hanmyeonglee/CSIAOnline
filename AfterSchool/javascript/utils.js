@@ -75,7 +75,7 @@ export const deleteCookie = (name) => { // 해당 쿠키 요소만 삭제
  * @returns content를 전송한 결과 Promise를 반환합니다.
  */
 export const postFetch = async (content, link, type) => {
-    return await fetch(`http://127.0.0.1/${link}`, {
+    return await fetch(link, {
         method: "POST",
         headers: {
             'Content-type': `${type}, charset=UTF-8`
