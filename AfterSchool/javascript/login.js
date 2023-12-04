@@ -4,6 +4,7 @@ import { loading, errorHandling, getCookie, setCookie, deleteCookie, postFetch }
 const sessionAge = 604800;
 const loginBtn = document.getElementById("login");
 const pubkey = await fetchPublicKeyFromServer();
+const base_link = location.href;
 
 /**
  * 화면에 들어왔을 때 session이 있는지 체크하는 함수
@@ -17,10 +18,7 @@ export const sessionConfirm = async () => {
     if(!session){
         return False;
     } else {
-        let result = await postFetch(JSON.stringify({
-            "operation":"session",
-            "body":session
-        })).then(response => {
+        let result = await postFetch(session, base_link + "account/session", "text/plain").then(response => {
             return response.json();
         });
 
@@ -55,12 +53,9 @@ export const loginConfirm = async (id, pw) => {
         }
     );
 
-    let encrypted_text = RSAEncryption(plain);
+    //let encrypted_text = RSAEncryption(plain);
 
-    let result = await postFetch(JSON.stringify({
-        "operation":"login",
-        "body":encrypted_text
-    })).then(async response => {
+    let result = await postFetch(plain, base_link + "account/login", "application/json").then(async response => {
         return await response.json();
     });
 

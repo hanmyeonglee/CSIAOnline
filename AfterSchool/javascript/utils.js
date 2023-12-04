@@ -69,14 +69,16 @@ export const deleteCookie = (name) => { // 해당 쿠키 요소만 삭제
 /**
  * 보내준 text를 서버에 전송하여 결과를 반환하는 함수
  * @async
- * @param {String} content -> Json 또는 plain Text 형식의 데이터를 입력해주세요.
+ * @param {String} content -> Json 형식의 데이터를 입력해주세요.
+ * @param {String} link -> POST를 보내려는 주소를 넣으세요.
+ * @param {String} type -> 보내려는 데이터의 타입을 입력하세요.(textlain , application/json 등)
  * @returns content를 전송한 결과 Promise를 반환합니다.
  */
-export const postFetch = async (content) => {
-    return await fetch("http://127.0.0.1/pythonaddress", {
+export const postFetch = async (content, link, type) => {
+    return await fetch(`http://127.0.0.1/${link}`, {
         method: "POST",
         headers: {
-            'Content-type': 'text/plain, charset=UTF-8'
+            'Content-type': `${type}, charset=UTF-8`
         },
         body: content
     });
