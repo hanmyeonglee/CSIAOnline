@@ -42,7 +42,7 @@ class User(models.Model):
         선생님의 경우 name, number, id는 거의 쓸모없다.
         """
         return {
-            "auth": self.auth,
+            "auth": bin(self.auth)[2:],
             "name": self.name,
             "number": self.numbify(),
             "id": self.user_id,

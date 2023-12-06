@@ -32,13 +32,13 @@ def login(request: HttpRequest):
                 session.save()
 
             else:
-                content = "invalid login information"
+                content = "invalid id or password"
 
         else:
             content = "invalid data type"
 
     else:
-        content = "invalid http method type"
+        content = "invalid request method"
 
     return HttpResponse(json.dumps({
         "operation": "login",
@@ -61,25 +61,24 @@ def session_confirm(request: HttpRequest):
             user_session = LoginSession.objects.filter(session=session)
             if len(user_session) == 1:
                 result = True
-                content = user_session[0].user.jsonify()
 
-                session = generate()
-                user_session[0].initialize_session(session=session)
+                content = generate()
+                user_session[0].initialize_session(session=content)
 
             elif len(user_session) > 1:
-                content = "internal disposing process error : session overlapped"
+                content = "invalid session, relogin"
 
                 for one in user_session:
                     one.delete()
 
             else:
-                content = "invalid session"
+                content = "invalid session, relogin"
 
         else:
             content = "invalid data type"
 
     else:
-        content = "invalid http method type"
+        content = "invalid request method"
 
     return HttpResponse(json.dumps({
         "operation": "login",

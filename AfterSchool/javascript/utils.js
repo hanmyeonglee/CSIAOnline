@@ -68,18 +68,31 @@ export const deleteCookie = (name) => { // 해당 쿠키 요소만 삭제
 
 /**
  * 보내준 text를 서버에 전송하여 결과를 반환하는 함수
- * @async
  * @param {String} content -> Json 형식의 데이터를 입력해주세요.
  * @param {String} link -> POST를 보내려는 주소를 넣으세요.
  * @param {String} type -> 보내려는 데이터의 타입을 입력하세요.(textlain , application/json 등)
  * @returns content를 전송한 결과 Promise를 반환합니다.
  */
-export const postFetch = async (content, link, type) => {
-    return await fetch(link, {
+export const postFetch = (content, link, type) => {
+    return fetch(link, {
         method: "POST",
         headers: {
             'Content-type': `${type}, charset=UTF-8`
         },
         body: content
     });
+}
+
+/**
+ * query를 통한 서버에게 주는 get 요청을 Promise로 반환한다.
+ * @param {Object} query -> 서버에 보낼 query가 있는 object를 입력한다. key=value 형태로 변환된다.
+ * @param {String} link -> 서버의 주소를 입력한다.
+ * @returns query를 통한 get 요청의 결과를 Promise로 반환합니다.
+ */
+export const getFetch = (query, link) => {
+    let query_list = [];
+    for([key, value] of Object.entries(query)){
+        query_list.push(`${key}=${value}`)
+    }
+    return (query_list.length > 0) ? fetch(link + `?${query_list.join('&')}`) : fetch(link);
 }

@@ -1,15 +1,15 @@
-import { fetchPublicKeyFromServer, RSAEncryption } from './crypto.js';
+//import { fetchPublicKeyFromServer, RSAEncryption } from './crypto.js';
 import { loading, errorHandling, getCookie, setCookie, deleteCookie, postFetch } from './utils.js';
 
 const sessionAge = 604800;
 const loginBtn = document.getElementById("login");
-const pubkey = await fetchPublicKeyFromServer();
+//const pubkey = await fetchPublicKeyFromServer();
 const base_link = location.href;
 
 /**
  * 화면에 들어왔을 때 session이 있는지 체크하는 함수
  * @async
- * @returns session이 있으면 session을 서버에 보내 검증한 결과를 T/F로 반환하며, True일 경우 새로운 session을 등록한다. 만약 서버 오류일 경우 undefined를 반환한다.
+ * @returns session이 있으면 session을 서버에 보내 검증한 결과를 반환하며, True일 경우 새로운 session을 등록한다. 만약 서버 오류나 False일 경우 undefined를 반환한다.
  * 
  * @todo : session hijacking 방지법 적용하기 
  */
@@ -25,11 +25,9 @@ export const sessionConfirm = async () => {
         let operation = result["operation"];
         let body = result["body"];
 
-        if(operation == "sessionConfirm"){
-            if(body["result"]){
-                setCookie("CSIAOnlineSession", body["content"], {"max-age":sessionAge});
-            }
-            return body["result"];
+        if(operation == "sessionConfirm" && body["result"]){
+            setCookie("CSIAOnlineSession", body["content"], {"max-age":sessionAge});
+            return body;
         } else {
             return undefined;
         }
