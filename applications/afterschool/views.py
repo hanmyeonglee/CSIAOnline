@@ -17,15 +17,18 @@ def get_user_information(request: HttpRequest):
         result, login_session = multi_session(
             LoginSession.objects.filter(session=session))
 
-        user = login_session.user
+        if result:
+            user = login_session.user
 
-        content = user.jsonify() if result else login_session
+            content = login_session.user.jsonify()
 
-        number = user.numbify()
-        seat_number = SeatNumber.objects.filter(number=number)
+            number = user.numbify()
+            seat_number = SeatNumber.objects.filter(number=number)
 
-        content["seat_number"] = seat_number[0] if len(
-            seat_number) == 1 else -1
+            content["seat_number"] = seat_number[0] if len(
+                seat_number) == 1 else -1
+        else:
+            content = login_session
 
     else:
         content = "invalid request method"
@@ -95,12 +98,13 @@ def get_today_supervisor(request: HttpRequest):
     """
     result, content = False, ""
     if request.method == "GET":
-        format = "%Y/%m/%d"
+        format = "%Y-%m-%d"
 
         date = datetime.strptime(request.GET.get("date"), format)
         supervisor = Supervisor.objects.filter(date=date)
-        result, content = True, supervisor[0].name if len(
-            supervisor) > 1 else False, "invalid date"
+        print(supervisor)
+        result, content = (True, supervisor[0].jsonify()) if len(
+            supervisor) >= 1 else (False, "invalid date")
 
     else:
         content = "invalid request method"

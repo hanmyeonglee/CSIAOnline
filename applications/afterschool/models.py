@@ -23,6 +23,12 @@ class Supervisor(models.Model):
     date = models.DateField(primary_key=True)
     name = models.CharField(max_length=64)
 
+    def jsonify(self):
+        return {
+            "date": self.date.strftime("%Y-%m-%d"),
+            "name": self.name,
+        }
+
 
 class ClassInformation(models.Model):
     """
@@ -31,13 +37,13 @@ class ClassInformation(models.Model):
         id -> 수업 아이디(숫자)\n
         class_name -> 수업명\n
         class_location -> 수업 위치\n
-        class_time -> 수업 시간, 000 ~ 111까지 binary로 나타냄(저장할 땐 숫자)
+        class_time -> 수업 시간, 000 ~ 111까지 binary로 나타냄(저장할 땐 숫자)\n
         teacher -> 수업 교사
     """
     id = models.SmallIntegerField(primary_key=True)
     class_name = models.CharField(max_length=255)
     class_location = models.CharField(max_length=255)
-    class_time = models.SmallIntegerField()
+    class_time = models.CharField(max_length=64)
     teacher = models.CharField(max_length=64)
 
     def jsonify(self):
@@ -45,7 +51,7 @@ class ClassInformation(models.Model):
             "id_number": self.id,
             "class_name": self.class_name,
             "class_location": self.class_location,
-            "class_time": bin(self.class_time)[2:],
+            "class_time": self.class_time,
             "teacher": self.teacher,
         }
 
@@ -61,22 +67,22 @@ class UserWeekSchedule(models.Model):
         date -> 오늘 날짜
     """
     user = models.ForeignKey("account.User", on_delete=models.CASCADE)
-    mon = models.CharField(max_length=5)
-    tue = models.CharField(max_length=5)
-    wed = models.CharField(max_length=5)
-    thr = models.CharField(max_length=5)
-    mon_fixed = models.CharField(max_length=5)
-    tue_fixed = models.CharField(max_length=5)
-    wed_fixed = models.CharField(max_length=5)
-    thr_fixed = models.CharField(max_length=5)
+    mon = models.CharField(max_length=10)
+    tue = models.CharField(max_length=10)
+    wed = models.CharField(max_length=10)
+    thr = models.CharField(max_length=10)
+    mon_fixed = models.CharField(max_length=10)
+    tue_fixed = models.CharField(max_length=10)
+    wed_fixed = models.CharField(max_length=10)
+    thr_fixed = models.CharField(max_length=10)
     date = models.DateField()
 
     def __str__(self):
-        return f"Week Schedule of ({self.user}) on {self.date.strftime('%Y/%m/%d')}"
+        return f"Week Schedule of ({self.user}) on {self.date.strftime('%Y-%m-%d')}"
 
     def jsonify(self):
         return {
-            "date": self.date.strftime('%Y/%m/%d'),
+            "date": self.date.strftime('%Y-%m-%d'),
             "mon": self.mon,
             "tue": self.tue,
             "wed": self.wed,
