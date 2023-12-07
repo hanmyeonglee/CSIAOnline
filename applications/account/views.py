@@ -10,6 +10,44 @@ def hash256(text):
     return sha256(sha256(text).digest()).hexdigest()
 
 
+def signup(request: HttpRequest):
+    result, content = False, ""
+
+    if request.method == "POST":
+        ct = request.content_type
+
+        if 'application/json' in ct:
+            signup = json.loads(request.body)
+
+            name, grade, classroom, number, id, pw = \
+                signup['name'], signup['grade'], signup['classroom'], \
+                signup['number'], signup['id'], signup['pw']
+
+            if User.objects.filter(grade=grade, classroom=classroom, number=number).exists():
+                content = "exist student number"
+            elif User.objects.filter(user_id=id).exists():
+                content = "overlapped id"
+            else:
+                temp = User(
+                    name=name, grade=grade, classroom=classroom,
+                    number=number, auth=0, user_id=id, password=hash256(pw.encode())
+                )
+                temp.save()
+
+                result = True
+
+        else:
+            content = "invalid request content_type"
+
+    else:
+        content = "invalid request method"
+
+    return HttpResponse(json.dumps({
+        "result": result,
+        "content": content,
+    }))
+
+
 def login(request: HttpRequest):
     result, content = False, ""
 
@@ -17,8 +55,9 @@ def login(request: HttpRequest):
         ct = request.content_type
 
         if 'application/json' in ct:
-            recv = json.loads(request.body)
-            id, pw = recv['id'], hash256(recv['pw'].encode())
+            input_login_information = json.loads(request.body)
+            id, pw = input_login_information['id'], hash256(
+                input_login_information['pw'].encode())
             user = User.objects.filter(user_id=id, password=pw)
 
             if len(user) == 1:
