@@ -7,5 +7,6 @@ urlpatterns = [
     path("schedule", views.get_user_schedule, name="user_schedule"),
     path("all_class", views.get_all_class, name="all_class"),
     path("supervisor", views.get_today_supervisor, name="supervisor"),
-    path("fix", views.set_fixed_schedule, name="fix"),
+    path("fix", views.set_fixed_schedule, name="fixed_schedule"),
+    path("temp", views.set_schedule, name="temp_schedule"),
 ]
