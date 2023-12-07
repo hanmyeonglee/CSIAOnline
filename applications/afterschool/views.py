@@ -113,3 +113,50 @@ def get_today_supervisor(request: HttpRequest):
         "result": result,
         "content": content,
     }), content_type="application/json")
+
+
+def set_fixed_schedule(request: HttpRequest):
+    """
+    Todo:
+        디자인 애 말 듣고 야자/조퇴랑 방과후/주문형 분리할지 말지를 결정하자고
+        그 다음 완성시키기.
+    """
+    result, content = False, ""
+    if request.method == "POST":
+        ct = request.content_type
+
+        if 'application/json' in ct:
+            data = json.loads(request.body)
+            session, fixed_schedule = data['session'], data['fixed']
+            res, login_session = multi_session(
+                LoginSession.objects.filter(session=session))
+
+            if res:
+                user = login_session.user
+                result, schedule = multi_schedule(
+                    UserWeekSchedule.objects.filter(user=user))
+
+                if result:
+                    schedule.mon_fixed = fixed_schedule['mon']
+                    schedule.tue_fixed = fixed_schedule['tue']
+                    schedule.wed_fixed = fixed_schedule['wed']
+                    schedule.thr_fixed = fixed_schedule['thr']
+                    schedule.save()
+
+                else:
+                    content = schedule
+
+            else:
+                result = res
+                content = login_session
+
+        else:
+            content = "invalid request content_type"
+
+    else:
+        content = "invalid request method"
+
+    return HttpResponse(json.dumps({
+        "result": result,
+        "content": content,
+    }), content_type="application/json")
