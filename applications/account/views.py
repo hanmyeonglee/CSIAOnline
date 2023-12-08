@@ -26,24 +26,30 @@ def signup(request: HttpRequest):
         ct = request.content_type
 
         if 'application/json' in ct:
-            signup = json.loads(request.body)
+            flag = True
+            try:
+                signup = json.loads(request.body)
 
-            name, grade, classroom, number, id, pw = \
-                signup['name'], signup['grade'], signup['classroom'], \
-                signup['number'], signup['id'], signup['pw']
+                name, grade, classroom, number, id, pw = \
+                    signup['name'], signup['grade'], signup['classroom'], \
+                    signup['number'], signup['id'], signup['pw']
+            except:
+                content = "invalid data organization"
+                flag = False
 
-            if User.objects.filter(grade=grade, classroom=classroom, number=number).exists():
-                content = "exist student number"
-            elif User.objects.filter(user_id=id).exists():
-                content = "overlapped id"
-            else:
-                temp = User(
-                    name=name, grade=grade, classroom=classroom,
-                    number=number, auth=0, user_id=id, password=hash256(pw.encode())
-                )
-                temp.save()
+            if flag:
+                if User.objects.filter(grade=grade, classroom=classroom, number=number).exists():
+                    content = "exist student number"
+                elif User.objects.filter(user_id=id).exists():
+                    content = "overlapped id"
+                else:
+                    temp = User(
+                        name=name, grade=grade, classroom=classroom,
+                        number=number, auth=0, user_id=id, password=hash256(pw.encode())
+                    )
+                    temp.save()
 
-                result = True
+                    result = True
 
         else:
             content = "invalid request content_type"
@@ -68,21 +74,28 @@ def login(request: HttpRequest):
         ct = request.content_type
 
         if 'application/json' in ct:
-            input_login_information = json.loads(request.body)
-            id, pw = input_login_information['id'], hash256(
-                input_login_information['pw'].encode())
-            user = User.objects.filter(user_id=id, password=pw)
+            flag = True
+            try:
+                input_login_information = json.loads(request.body)
+                id, pw = input_login_information['id'], hash256(
+                    input_login_information['pw'].encode())
+            except:
+                content = "invalid data organization"
+                flag = False
 
-            if len(user) == 1:
-                result = True
-                user = user[0]
-                content = generate()
-                session = LoginSession(
-                    user=user, session=content, allot_time=datetime.now(timezone('Asia/Seoul')))
-                session.save()
+            if flag:
+                user = User.objects.filter(user_id=id, password=pw)
 
-            else:
-                content = "invalid id or password"
+                if len(user) == 1:
+                    result = True
+                    user = user[0]
+                    content = generate()
+                    session = LoginSession(
+                        user=user, session=content, allot_time=datetime.now(timezone('Asia/Seoul')))
+                    session.save()
+
+                else:
+                    content = "invalid id or password"
 
         else:
             content = "invalid data type"
@@ -111,24 +124,30 @@ def session_confirm(request: HttpRequest):
         ct = request.content_type
 
         if 'text/plain' in ct:
-            session = request.body.decode()
+            flag = True
+            try:
+                session = request.body.decode()
+            except:
+                content = "invalid data organization"
+                flag = False
 
-            user_session = LoginSession.objects.filter(session=session)
-            if len(user_session) == 1:
-                result = True
+            if flag:
+                user_session = LoginSession.objects.filter(session=session)
+                if len(user_session) == 1:
+                    result = True
 
-                # 세션 로그인 시 새로운 세션 발급하는 코드, 그런데 이거 다중 로그인이 힘들어서 주석처리함, 필요하면 그때 해제하삼
-                content = generate()
-                user_session[0].initialize_session(session=content)
+                    # 세션 로그인 시 새로운 세션 발급하는 코드, 그런데 이거 다중 로그인이 힘들어서 주석처리함, 필요하면 그때 해제하삼
+                    content = generate()
+                    user_session[0].initialize_session(session=content)
 
-            elif len(user_session) > 1:
-                content = "invalid session, relogin"
+                elif len(user_session) > 1:
+                    content = "invalid session, relogin"
 
-                for one in user_session:
-                    one.delete()
+                    for one in user_session:
+                        one.delete()
 
-            else:
-                content = "invalid session, relogin"
+                else:
+                    content = "invalid session, relogin"
 
         else:
             content = "invalid data type"
@@ -155,16 +174,21 @@ def get_user_information(request: HttpRequest):
         ct = request.content_type
 
         if 'text/plain' in ct:
-            # 여기서 session key가 없으면 오류, 이거 예외처리 해놓기
-            session = request.body.decode()
-            result, login_session = multi_session(
-                LoginSession.objects.filter(session=session))
+            try:
+                session = request.body.decode()
+            except:
+                content = "invalid data organization"
+                flag = False
 
-            if result:
-                content = login_session.user.jsonify()
+            if flag:
+                result, login_session = multi_session(
+                    LoginSession.objects.filter(session=session))
 
-            else:
-                content = login_session
+                if result:
+                    content = login_session.user.jsonify()
+
+                else:
+                    content = login_session
 
         else:
             content = "invalid request content_type"

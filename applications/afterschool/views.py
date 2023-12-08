@@ -66,11 +66,12 @@ def get_today_supervisor(request: HttpRequest):
 
         try:
             date = datetime.strptime(request.GET.get("date"), format)
-            supervisor = Supervisor.objects.filter(date=date)
-            result, content = (True, supervisor[0].jsonify()) if len(
-                supervisor) == 1 else (False, "invalid date")
-        except TypeError and ValueError:
-            content = "invalid date format"
+        except TypeError or ValueError:
+            content = "invalid data organization"
+
+        supervisor = Supervisor.objects.filter(date=date)
+        result, content = (True, supervisor[0].jsonify()) if len(
+            supervisor) == 1 else (False, "invalid date")
 
     else:
         content = "invalid request method"
@@ -91,28 +92,35 @@ def get_afterschooluser_information(request: HttpRequest):
         ct = request.content_type
 
         if 'text/plain' in ct:
-            # 여기서 session key가 없으면 오류, 이거 예외처리 해놓기
-            session = request.body.decode()
-            result, login_session = multi_session(
-                LoginSession.objects.filter(session=session))
+            flag = True
+            try:
+                session = request.body.decode()
+            except:
+                content = "invalid data organization"
+                flag = False
 
-            if result:
-                user = login_session.user
-                users = AfterSchoolUser.objects.filter(user=user)
+            if flag:
+                result, login_session = multi_session(
+                    LoginSession.objects.filter(session=session))
 
-                if len(users) == 1:
-                    content = users[0].jsonify()
+                if result:
+                    user = login_session.user
+                    users = AfterSchoolUser.objects.filter(user=user)
+
+                    if len(users) == 1:
+                        content = users[0].jsonify()
+
+                    else:
+                        content = afterschooluser_default_generator(
+                            user=user).jsonify()
+
+                    seat_number = SeatNumber.objects.filter(
+                        number=user.numbify())
+                    content["seat_number"] = seat_number[0] if len(
+                        seat_number) == 1 else -1
 
                 else:
-                    content = afterschooluser_default_generator(
-                        user=user).jsonify()
-
-                seat_number = SeatNumber.objects.filter(number=user.numbify())
-                content["seat_number"] = seat_number[0] if len(
-                    seat_number) == 1 else -1
-
-            else:
-                content = login_session
+                    content = login_session
 
         else:
             content = "invalid request content_type"
@@ -135,41 +143,48 @@ def get_afterschooluser_schedule(request: HttpRequest):
         ct = request.content_type
 
         if 'application/json' in ct:
-            recv = json.loads(request.body)
-            session, date = recv["session"], datetime.strptime(
-                recv["date"], "%Y-%m-%d")
+            flag = True
+            try:
+                recv = json.loads(request.body)
+                session, date = recv["session"], datetime.strptime(
+                    recv["date"], "%Y-%m-%d"
+                )
+            except:
+                content = "invalid data organization"
+                flag = False
 
-            res, login_session = multi_session(
-                LoginSession.objects.filter(session=session))
+            if flag:
+                res, login_session = multi_session(
+                    LoginSession.objects.filter(session=session))
 
-            if res:
-                user = login_session.user
-                users = AfterSchoolUser.objects.filter(user=user)
+                if res:
+                    user = login_session.user
+                    users = AfterSchoolUser.objects.filter(user=user)
 
-                if len(users) == 1:
-                    schedules = UserWeekSchedule.objects.filter(
-                        user=users[0], date=date)
+                    if len(users) == 1:
+                        schedules = UserWeekSchedule.objects.filter(
+                            user=users[0], date=date)
 
-                    if len(schedules) == 1:
-                        result, content = True, schedules[0].jsonify()
+                        if len(schedules) == 1:
+                            result, content = True, schedules[0].jsonify()
+
+                        else:
+                            for schedule in schedules:
+                                schedule.delete()
+                            userweekschedule_default_generator(
+                                afterschool_user=users[0], date=date)
+                            content = "server error, rewrite the informations"
 
                     else:
-                        for schedule in schedules:
-                            schedule.delete()
+                        for usr in users:
+                            usr.delete()
+                        temp = afterschooluser_default_generator(user=user)
                         userweekschedule_default_generator(
-                            afterschool_user=users[0], date=date)
+                            afterschool_user=temp, date=date)
                         content = "server error, rewrite the informations"
 
                 else:
-                    for usr in users:
-                        usr.delete()
-                    temp = afterschooluser_default_generator(user=user)
-                    userweekschedule_default_generator(
-                        afterschool_user=temp, date=date)
-                    content = "server error, rewrite the informations"
-
-            else:
-                content = login_session
+                    content = login_session
 
         else:
             content = "invalid request content_type"
@@ -192,8 +207,14 @@ def set_fixed_schedule(request: HttpRequest):
         ct = request.content_type
 
         if 'application/json' in ct:
-            data = json.loads(request.body)
-            session, fixed_schedule = data['session'], data['fixed_schedule']
+            flag = True
+            try:
+                data = json.loads(request.body)
+                session, fixed_schedule = data['session'], data['fixed_schedule']
+            except:
+                content = "invalid data organization"
+                flag = False
+
             result, login_session = multi_session(
                 LoginSession.objects.filter(session=session))
 
@@ -242,50 +263,56 @@ def set_schedule(request: HttpRequest):
         ct = request.content_type
 
         if 'application/json' in ct:
-            data = json.loads(request.body)
-            session, temp_schedule, date = \
-                data['session'], data['temp_schedule'], \
-                datetime.strptime(data['date'], "%Y-%m-%d")
+            flag = True
+            try:
+                data = json.loads(request.body)
+                session, temp_schedule, date = \
+                    data['session'], data['temp_schedule'], \
+                    datetime.strptime(data['date'], "%Y-%m-%d")
+            except:
+                content = "invalid data organization"
+                flag = False
 
-            res, login_session = multi_session(
-                LoginSession.objects.filter(session=session))
+            if flag:
+                res, login_session = multi_session(
+                    LoginSession.objects.filter(session=session))
 
-            if res:
-                user = login_session.user
-                # afterschoolUser에서 유저를 받아와 그걸 다시 UserWeekSchedule에서 찾아야함
-                users = AfterSchoolUser.objects.filter(user=user)
+                if res:
+                    user = login_session.user
+                    # afterschoolUser에서 유저를 받아와 그걸 다시 UserWeekSchedule에서 찾아야함
+                    users = AfterSchoolUser.objects.filter(user=user)
 
-                if len(users) == 1:
-                    afterschool_user = users[0]
-                    schedules = UserWeekSchedule.objects.filter(
-                        user=afterschool_user, date=date)
+                    if len(users) == 1:
+                        afterschool_user = users[0]
+                        schedules = UserWeekSchedule.objects.filter(
+                            user=afterschool_user, date=date)
 
-                    if len(schedules) != 1:
-                        for schedule in schedules:
-                            schedule.delete()
-                        schedule = userweekschedule_default_generator(
-                            afterschool_user=afterschool_user, date=date)
+                        if len(schedules) != 1:
+                            for schedule in schedules:
+                                schedule.delete()
+                            schedule = userweekschedule_default_generator(
+                                afterschool_user=afterschool_user, date=date)
+
+                        else:
+                            schedule = schedules[0]
+
+                        schedule.mon = temp_schedule['mon']
+                        schedule.tue = temp_schedule['tue']
+                        schedule.wed = temp_schedule['wed']
+                        schedule.thr = temp_schedule['thr']
+                        schedule.save()
+
+                        result = True
 
                     else:
-                        schedule = schedules[0]
-
-                    schedule.mon = temp_schedule['mon']
-                    schedule.tue = temp_schedule['tue']
-                    schedule.wed = temp_schedule['wed']
-                    schedule.thr = temp_schedule['thr']
-                    schedule.save()
-
-                    result = True
+                        for user in users:
+                            user.delete()
+                        afterschooluser_default_generator(user=user)
+                        content = "server error, rewrite the informations"
 
                 else:
-                    for user in users:
-                        user.delete()
-                    afterschooluser_default_generator(user=user)
-                    content = "server error, rewrite the informations"
-
-            else:
-                result = res
-                content = login_session
+                    result = res
+                    content = login_session
 
         else:
             content = "invalid request content_type"
@@ -306,33 +333,40 @@ def get_all_schedule(request: HttpRequest):
         ct = request.content_type
 
         if 'application/json' in ct:
-            recv = json.loads(request.body)
-            session, date = \
-                recv['session'], datetime.strptime(recv['date'], "%Y-%m-%d")
+            flag = True
+            try:
+                recv = json.loads(request.body)
+                session, date = \
+                    recv['session'], datetime.strptime(
+                        recv['date'], "%Y-%m-%d")
+            except:
+                content = "invalid data organization"
+                flag = False
 
-            res, login_session = multi_session(
-                LoginSession.objects.filter(session=session))
+            if flag:
+                res, login_session = multi_session(
+                    LoginSession.objects.filter(session=session))
 
-            if res:
-                user = login_session.user
+                if res:
+                    user = login_session.user
 
-                if user.auth == 1:
-                    students = UserWeekSchedule.objects.filter(date=date)
-                    content = []
+                    if user.auth == 1:
+                        students = UserWeekSchedule.objects.filter(date=date)
+                        content = []
 
-                    for student in students:
-                        content.append({
-                            "student": student.user.jsonify(),  # 여기 정보에 seat_number 있어야 하는데;
-                            "schedule": student.jsonify(),
-                        })
+                        for student in students:
+                            content.append({
+                                "student": student.user.jsonify(),  # 여기 정보에 seat_number 있어야 하는데;
+                                "schedule": student.jsonify(),
+                            })
 
-                    result = True
+                        result = True
+
+                    else:
+                        content = "invalid auth"
 
                 else:
-                    content = "invalid auth"
-
-            else:
-                content = login_session
+                    content = login_session
 
         else:
             content = "invalid request content_type"
@@ -353,32 +387,39 @@ def set_student_participate(request: HttpRequest):
         ct = request.content_type
 
         if 'application/json' in ct:
-            recv = json.loads(request.body)
-            session, date, id = recv['session'], datetime.strptime(
-                recv['date'], "%Y-%m-%d"), recv['id']
+            flag = True
+            try:
+                recv = json.loads(request.body)
+                session, date, id = recv['session'], datetime.strptime(
+                    recv['date'], "%Y-%m-%d"), recv['id']
+            except:
+                content = "invalid data organization"
+                flag = False
 
-            res, login_session = multi_session(
-                LoginSession.objects.filter(session=session))
+            if flag:
+                res, login_session = multi_session(
+                    LoginSession.objects.filter(session=session))
 
-            if res:
-                user = login_session.user
+                if res:
+                    user = login_session.user
 
-                if user.auth == 1:
-                    student = UserWeekSchedule.objects.filter(id=id, date=date)
+                    if user.auth == 1:
+                        student = UserWeekSchedule.objects.filter(
+                            id=id, date=date)
 
-                    if len(student) == 1:
-                        student[0].participate = not student[0].participate
-                        student[0].save()
-                        result = True
+                        if len(student) == 1:
+                            student[0].participate = not student[0].participate
+                            student[0].save()
+                            result = True
+
+                        else:
+                            content = "server error, reboot the website"
 
                     else:
-                        content = "server error, reboot the website"
+                        content = "invalid auth"
 
                 else:
-                    content = "invalid auth"
-
-            else:
-                content = login_session
+                    content = login_session
 
         else:
             content = "invalid request content_type"
