@@ -23,18 +23,19 @@ class User(models.Model):
     classroom = models.SmallIntegerField()
     number = models.SmallIntegerField()
     auth = models.SmallIntegerField()
-    user_id = models.CharField(max_length=255, default="default_id")
+    user_id = models.CharField(
+        max_length=255, default="default_id", unique=True)
     password = models.CharField(max_length=70)
 
     def __str__(self):
-        return f"#{self.grade}-{self.classroom}-{str(self.number).ljust(2, '0')}-{bin(self.auth)[2:]}"
+        return f"#{self.grade}-{self.classroom}-{str(self.number).rjust(2, '0')}-{bin(self.auth)[2:]}"
 
     def numbify(self):
         """
         학생의 정보를 학번으로 직렬화하여 출력한다.\n
         선생님들은 H00000과 같이 invalid하게 나온다.
         """
-        return f"H{self.grade}0{self.classroom}{str(self.number).ljust(2, '0')}"
+        return f"H{self.grade}0{self.classroom}{str(self.number).rjust(2, '0')}"
 
     def jsonify(self):
         """
@@ -44,8 +45,11 @@ class User(models.Model):
         return {
             "auth": bin(self.auth)[2:],
             "name": self.name,
-            "number": self.numbify(),
+            "student_number": self.numbify(),
             "id": self.user_id,
+            "grade": self.grade,
+            "classroom": self.classroom,
+            "number": self.number,
         }
 
 
@@ -65,7 +69,7 @@ class LoginSession(models.Model):
         id session 삭제/재발급 할 때마다 다시 1로 초기화하는거... 필요하나?
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    session = models.CharField(max_length=32)
+    session = models.CharField(max_length=32, unique=True)
     allot_time = models.DateTimeField()
 
     def __str__(self):

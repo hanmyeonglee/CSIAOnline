@@ -1,16 +1,25 @@
 from django.http import HttpRequest, HttpResponse
 from .models import User, LoginSession
 from .generate_session import generate
+from afterschool.multi_handler import multi_session
 from hashlib import sha256
-from datetime import datetime, timezone
+from datetime import datetime
+from pytz import timezone
 import json
 
 
 def hash256(text):
+    """
+    비밀번호 이중해시
+    """
     return sha256(sha256(text).digest()).hexdigest()
 
 
 def signup(request: HttpRequest):
+    """
+    회원가입하는 함수\n
+    아이디 또는 학번이 이미 존재할 경우 False이다.
+    """
     result, content = False, ""
 
     if request.method == "POST":
@@ -49,6 +58,10 @@ def signup(request: HttpRequest):
 
 
 def login(request: HttpRequest):
+    """
+    로그인하는 함수, 성공하면 세션을 등록한다.\n
+    실패하면 False
+    """
     result, content = False, ""
 
     if request.method == 'POST':
@@ -63,11 +76,9 @@ def login(request: HttpRequest):
             if len(user) == 1:
                 result = True
                 user = user[0]
-                for overlap in LoginSession.objects.filter(user=user):
-                    overlap.delete()
                 content = generate()
                 session = LoginSession(
-                    user=user, session=content, allot_time=datetime.now(timezone.utc))
+                    user=user, session=content, allot_time=datetime.now(timezone('Asia/Seoul')))
                 session.save()
 
             else:
@@ -89,6 +100,11 @@ def login(request: HttpRequest):
 
 
 def session_confirm(request: HttpRequest):
+    """
+    세션 확인하는 함수\n
+    1. 세션 확인 시 세션 재발급 -> 하나의 기기만 쓰면 ㄱㅊ은데 두 개 이상 사용하면 다중 로그인이 힘듦\n
+    2. 세션 재발급 X -> 다중 기기 로그인이 가능함, 그러나 보안상 별로 추천하지는 않음(우선 이걸 선택함)
+    """
     result, content = False, ""
 
     if request.method == "POST":
@@ -101,6 +117,7 @@ def session_confirm(request: HttpRequest):
             if len(user_session) == 1:
                 result = True
 
+                # 세션 로그인 시 새로운 세션 발급하는 코드, 그런데 이거 다중 로그인이 힘들어서 주석처리함, 필요하면 그때 해제하삼
                 content = generate()
                 user_session[0].initialize_session(session=content)
 
@@ -126,3 +143,36 @@ def session_confirm(request: HttpRequest):
             "content": content,
         }
     }))
+
+
+def get_user_information(request: HttpRequest):
+    """
+    GET의 query를 통해 session을 전달하면 session을 확인한 후 user 정보를 확인해서 반환한다.\n
+    유저 정보는 json의 형태로 나타내진다. 대충 클릭해서 확인해봐라.
+    """
+    result, content = False, ""
+    if request.method == "POST":
+        ct = request.content_type
+
+        if 'text/plain' in ct:
+            # 여기서 session key가 없으면 오류, 이거 예외처리 해놓기
+            session = request.body.decode()
+            result, login_session = multi_session(
+                LoginSession.objects.filter(session=session))
+
+            if result:
+                content = login_session.user.jsonify()
+
+            else:
+                content = login_session
+
+        else:
+            content = "invalid request content_type"
+
+    else:
+        content = "invalid request method"
+
+    return HttpResponse(json.dumps({
+        "result": result,
+        "content": content,
+    }), content_type="application/json")

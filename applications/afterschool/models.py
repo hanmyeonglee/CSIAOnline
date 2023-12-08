@@ -1,4 +1,5 @@
 from django.db import models
+from account.models import User
 
 
 class SeatNumber(models.Model):
@@ -10,7 +11,7 @@ class SeatNumber(models.Model):
         seat_number -> 자리 번호
     """
     number = models.CharField(max_length=10, primary_key=True)
-    seat_number = models.SmallIntegerField()
+    seat_number = models.SmallIntegerField(unique=True)
 
 
 class Supervisor(models.Model):
@@ -56,26 +57,51 @@ class ClassInformation(models.Model):
         }
 
 
-class UserWeekSchedule(models.Model):
+class AfterSchoolUser(models.Model):
     """
-    각 user의 한 주 스케쥴을 012 등의 숫자 배열로 담는다.\n
-    숫자는 ClassInformation의 아이디이다.\n
-    Args:
-        user -> 유저 정보\n
-        mon, tue, wed, thr -> 유저가 이번주 신청한 스케쥴\n
-        mon,tue,wed,thr_fixed -> 유저가 정한 fixed한 스케쥴\n
-        date -> 오늘 날짜
+    AfterSchool에서 사용하는 User 정보\n
+    Args:\n
+        user -> user 정보\n
+        mon,tue,wed,thr_fixed -> 유저가 정한 fixed한 스케쥴
     """
-    user = models.ForeignKey("account.User", on_delete=models.CASCADE)
-    mon = models.CharField(max_length=10)
-    tue = models.CharField(max_length=10)
-    wed = models.CharField(max_length=10)
-    thr = models.CharField(max_length=10)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     mon_fixed = models.CharField(max_length=10)
     tue_fixed = models.CharField(max_length=10)
     wed_fixed = models.CharField(max_length=10)
     thr_fixed = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.mon_fixed}|{self.tue_fixed}|{self.wed_fixed}|{self.thr_fixed} : {self.user}"
+
+    def jsonify(self):
+        return {
+            "mon_fixed": self.mon_fixed,
+            "tue_fixed": self.tue_fixed,
+            "wed_fixed": self.wed_fixed,
+            "thr_fixed": self.thr_fixed,
+        }
+
+
+class UserWeekSchedule(models.Model):
+    """
+    각 afterschool user의 한 주 스케쥴을 012 등의 숫자 배열로 담는다.\n
+    숫자는 ClassInformation의 아이디이다.\n
+    Args:
+        user -> afterschool 유저 정보\n
+        mon, tue, wed, thr -> 유저가 이번주 신청한 스케쥴\n
+        date -> 오늘 날짜\n
+        participate -> 야자 제대로 참가했는지\n
+    Todo:\n
+        fixed를 User 정보로 옮기자
+    """
+    user = models.ForeignKey(
+        AfterSchoolUser, on_delete=models.CASCADE)
+    mon = models.CharField(max_length=10)
+    tue = models.CharField(max_length=10)
+    wed = models.CharField(max_length=10)
+    thr = models.CharField(max_length=10)
     date = models.DateField()
+    participate = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Week Schedule of ({self.user}) on {self.date.strftime('%Y-%m-%d')}"
@@ -87,4 +113,5 @@ class UserWeekSchedule(models.Model):
             "tue": self.tue,
             "wed": self.wed,
             "thr": self.thr,
+            "id": self.id,
         }

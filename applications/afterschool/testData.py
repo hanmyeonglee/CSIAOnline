@@ -1,7 +1,8 @@
 from account.models import User
 from .models import *
 from random import randint, choice
-from datetime import datetime, timezone
+from datetime import datetime
+from pytz import timezone
 
 
 def triRandint():
@@ -15,16 +16,21 @@ def fRandint():
 def main01():
     user_list = User.objects.all()
     for user in user_list:
-        date = datetime.now(timezone.utc)
+        date = datetime.now(timezone('Asia/Seoul'))
         date_only = datetime(date.year, date.month, date.day)
-        tmp = UserWeekSchedule(
+        tmp_user = AfterSchoolUser(
             user=user,
-            mon=triRandint(), tue=triRandint(), wed=triRandint(), thr=triRandint(),
             mon_fixed=triRandint(), tue_fixed=triRandint(),
             wed_fixed=triRandint(), thr_fixed=triRandint(),
-            date=date_only
         )
-        tmp.save()
+        tmp_user.save()
+        tmp_schedule = UserWeekSchedule(
+            user=tmp_user,
+            mon=triRandint(), tue=triRandint(),
+            wed=triRandint(), thr=triRandint(),
+            date=date_only, participate=False,
+        )
+        tmp_schedule.save()
 
 
 def main02():
