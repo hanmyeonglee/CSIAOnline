@@ -350,13 +350,18 @@ def get_all_schedule(request: HttpRequest):
                 if res:
                     user = login_session.user
 
-                    if user.auth == 1:
+                    if user.auth >= 1:
                         students = UserWeekSchedule.objects.filter(date=date)
                         content = []
 
                         for student in students:
+                            seat_number = SeatNumber.objects.filter(
+                                number=student.numbify())
+                            tmp = student.user.jsonify()
+                            tmp['seat_number'] = seat_number[0] if len(
+                                seat_number) == 1 else -1
                             content.append({
-                                "student": student.user.jsonify(),  # 여기 정보에 seat_number 있어야 하는데;
+                                "student": tmp,  # 여기 정보에 seat_number 있어야 하는데;
                                 "schedule": student.jsonify(),
                             })
 

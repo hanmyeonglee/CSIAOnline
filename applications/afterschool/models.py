@@ -33,7 +33,7 @@ class Supervisor(models.Model):
 
 class ClassInformation(models.Model):
     """
-    각 방과후/주문형마다 아이디(숫자), 수업 이름/장소를 저장함
+    각 방과후/주문형마다 아이디(숫자), 수업 이름/장소를 저장함(CSMP 포함)
     Args:
         id -> 수업 아이디(숫자)\n
         class_name -> 수업명\n
@@ -62,7 +62,9 @@ class AfterSchoolUser(models.Model):
     AfterSchool에서 사용하는 User 정보\n
     Args:\n
         user -> user 정보\n
-        mon,tue,wed,thr_fixed -> 유저가 정한 fixed한 스케쥴
+        mon,tue,wed,thr_fixed -> 유저가 정한 fixed한 스케쥴\n
+    Todo:
+        마지막 업데이트 날짜 지정해서 학기/년도마다 업데이트 메시지 날려주기
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     mon_fixed = models.CharField(max_length=10)
@@ -93,6 +95,8 @@ class UserWeekSchedule(models.Model):
         participate -> 야자 제대로 참가했는지\n
     Todo:\n
         fixed를 User 정보로 옮기자
+        아니 잠만 이거 date 정보가 있는데 왜 mon/tue/wed/thr을 담아놨지?
+        이거 없애고 schedule 정보만 받는 걸로 수정하자.
     """
     user = models.ForeignKey(
         AfterSchoolUser, on_delete=models.CASCADE)
@@ -115,3 +119,19 @@ class UserWeekSchedule(models.Model):
             "thr": self.thr,
             "id": self.id,
         }
+
+
+class SeminarRoomBook(models.Model):
+    """
+    room1~6 : 세미나실 룸 예약한 User id를 /로 구분해서 저장한다.\n
+    date : 세머니실 예약 날짜
+    Todo:
+        세미나실 예약 기능 추가
+    """
+    room1 = models.CharField(max_length=255)
+    room2 = models.CharField(max_length=255)
+    room3 = models.CharField(max_length=255)
+    room4 = models.CharField(max_length=255)
+    room5 = models.CharField(max_length=255)
+    room6 = models.CharField(max_length=255)
+    date = models.DateField()
