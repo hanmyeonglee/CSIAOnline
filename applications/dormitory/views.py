@@ -158,7 +158,7 @@ def set_temp_nightschedule(request: HttpRequest):
     }), content_type="application/json")
 
 
-def get_nightschedule(request: HttpRequest):
+def get_all_nightschedule(request: HttpRequest):
     result, content = False, ""
     if request.method == "POST":
         flag = True

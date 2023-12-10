@@ -90,20 +90,16 @@ class UserWeekSchedule(models.Model):
     숫자는 ClassInformation의 아이디이다.\n
     Args:
         user -> afterschool 유저 정보\n
-        mon, tue, wed, thr -> 유저가 이번주 신청한 스케쥴\n
+        schedule -> 유저가 이번주 신청한 스케쥴\n
         date -> 오늘 날짜\n
         participate -> 야자 제대로 참가했는지\n
     Todo:\n
-        fixed를 User 정보로 옮기자
         아니 잠만 이거 date 정보가 있는데 왜 mon/tue/wed/thr을 담아놨지?
         이거 없애고 schedule 정보만 받는 걸로 수정하자.
     """
     user = models.ForeignKey(
         AfterSchoolUser, on_delete=models.CASCADE)
-    mon = models.CharField(max_length=10)
-    tue = models.CharField(max_length=10)
-    wed = models.CharField(max_length=10)
-    thr = models.CharField(max_length=10)
+    schedule = models.CharField(max_length=10)
     date = models.DateField()
     participate = models.BooleanField(default=False)
 
@@ -113,10 +109,7 @@ class UserWeekSchedule(models.Model):
     def jsonify(self):
         return {
             "date": self.date.strftime('%Y-%m-%d'),
-            "mon": self.mon,
-            "tue": self.tue,
-            "wed": self.wed,
-            "thr": self.thr,
+            "schedule": self.schedule,
             "id": self.id,
         }
 
@@ -124,8 +117,8 @@ class UserWeekSchedule(models.Model):
 class SeminarRoomBook(models.Model):
     """
     room1~6 : 세미나실 룸 예약한 User id를 /로 구분해서 저장한다.\n
-    date : 세머니실 예약 날짜
-    Todo:
+    date : 세머니실 예약 날짜\n
+    Todo:\n
         세미나실 예약 기능 추가
     """
     room1 = models.CharField(max_length=255)
