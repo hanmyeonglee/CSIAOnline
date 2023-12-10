@@ -26,8 +26,7 @@ def main01():
         tmp_user.save()
         tmp_schedule = UserWeekSchedule(
             user=tmp_user,
-            mon=triRandint(), tue=triRandint(),
-            wed=triRandint(), thr=triRandint(),
+            schedule=triRandint(),
             date=date_only, participate=False,
         )
         tmp_schedule.save()
