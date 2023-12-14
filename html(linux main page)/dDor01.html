@@ -1,0 +1,498 @@
+<style>
+.dDor01Cover{
+    display: block !important;
+}
+
+
+
+/* modal 부분 */
+
+.modal-content{
+    border-radius: 0 !important;
+    border: 2px solid #06469B !important;
+    background-color: #F3F8FF !important;
+}
+
+.modal-day-schedule > li > div{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 2vw;
+}
+
+.modal-header, .modal-body, .modal-footer{
+    border: none !important;
+}
+
+.modal-header > h5{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.modal-header > img{
+    cursor: pointer;
+}
+
+.modal-body.select{
+    min-height: 25vh;
+    height: fit-content;
+    max-height: 50vh;
+}
+
+/* .modal-footer.select > img{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.modal-footer.select > img:hover{
+    opacity: 1;
+} */
+
+.scheduleList{
+    margin-top: 3.5px;
+}
+
+.scheduleList > div{
+    cursor: pointer;
+}
+
+.scheduleList > div:hover{
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+
+
+/* autowrite modal 부분 */
+
+.modal-lg{
+    width: 60vw !important;
+    max-width: 60vw !important;
+}
+
+.modal-body.auto{
+    width: 90%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+}
+
+.autoWriteCover{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 34vh;
+}
+
+.autoWriteCover > div{
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    height: 40%;
+    place-items: center center;
+}
+
+.autoWriteCover > div > .input{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    place-items: center center;
+    border: 2px solid #06469B;
+    border-right-width: 0px;
+    cursor: pointer;
+}
+
+.autoWriteCover > .thr > .input{
+    border-right-width: 2px;
+}
+
+.autoWriteCover > div > .input:hover{
+    background-color: white;
+}
+
+.autoWriteCover > div > ul.dropdown-menu.show{
+    border-radius: 0;
+    padding: 0;
+    width: 13.5vw !important;
+}
+
+.autoWriteCover > div > ul > li{
+    border: 1px solid #06469B;
+    border-top-width: .5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.autoWriteConfirm{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.autoWriteConfirm:hover{
+    opacity: 1;
+}
+
+.autoWriteSelectClsCover{
+    height: 34vh;
+}
+
+
+
+
+/* dDor01 부분 */
+
+.dDor01Cover{
+    width: 100%;
+    height: 100%;
+}
+
+.dDor01{
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 3vh;
+    padding-top: 4vh;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
+}
+
+.dDor01 > .title{
+    font-size: 2.7vw;
+    width: fit-content;
+    place-self: center center;
+}
+
+.dDor01 > .subtitle{
+    font-size: 2vw;
+    width: fit-content;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    column-gap: 10vw;
+    place-self: center center;
+    place-items: center center;
+}
+
+.dDor01 > .subtitle > img{
+    height: 2.5vh;
+}
+
+.dDor01 > .content{
+    margin-top: 6vh;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: fit-content;
+    place-self: center center;
+}
+
+.dDor01 > .content > div{
+    width: 15vw;
+    height: 20vh;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    place-items: center center;
+}
+
+.dropdown-toggle::after{
+    content: none!important;
+}
+
+.dDor01 > .content > div > .dropdown-menu.show{
+    width: 15vw;
+    background-color: white;
+    border-radius: 0;
+    padding: 0;
+    margin-top: -2px;
+}
+
+.dDor01 > .content > div > .dropdown-menu.show > li{
+    border: 1px solid #06469B;
+    border-top-width: .5px;
+    text-align: center;
+    cursor: pointer;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.dDor01 > .content > div > .dropdown-menu.show > li:hover{
+    background-color: #F3F8FF !important;
+    color: #042047 !important;
+}
+
+.dDor01 > .content > div > .input{
+    border: 2px solid #06469B;
+    border-right-width: 0px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    place-items: center center;
+    cursor: pointer;
+}
+
+.dDor01 > .content > div > .input:hover{
+    background-color: #F3F8FF;
+}
+
+.dDor01 > .content > .thr > .input{
+    border-right-width: 2px;
+}
+
+.dDor01 > .content > div > .input > .text{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center center;
+    padding: 5px;
+}
+
+.dDor01 > .content > div > .input > .text > .innerText{
+    width: fit-content;
+    max-width: 11vw;
+    overflow-x: hidden;
+}
+
+.dDor01 > .content > div > .weekday{
+    font-size: 1.65vw;
+    place-self: end center;
+    position: relative;
+    top: 7px;
+}
+
+.dDor01 > .content > div > .date{
+    font-size: 1.45vw;
+    place-self: start center;
+}
+
+.dDor01Cover > .alarm, .dDor01Cover > .autoWrite{
+    position: fixed;
+    top: 90%;
+    margin-left: 3vw;
+    font-size: 1.8vw;
+}
+
+.dDor01Cover > .autoWrite{
+    right: 4.3%;
+    cursor: pointer;
+}
+
+.dDor01Cover > .autoWrite:hover{
+    text-decoration: underline;
+}
+
+#desktopRightArrow, #desktopLeftArrow{
+    cursor: pointer;
+}
+</style>
+<div class="dDor01Cover">
+    <div class="dDor01">
+        <div class="title dreamBold blue">야자 4교시 신청</div>
+        <div class="subtitle">
+            <img src="./image/leftArrow.png" id="desktopLeftArrow">
+            <div class="week dreamBold blue"></div>
+            <img src="./image/rightArrow.png" id="desktopRightArrow">
+        </div>
+        <div class="content mainCover">
+            <div class="mon">
+                <div class="weekday dreamBold blue">월</div>
+                <div class="date dream blue"></div>
+                <div class="input dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="sizedBox"></div>
+                    <div class="text">
+                        <div class="innerText dream smallFont"></div>
+                    </div>
+                    <img src="./image/chevron-down.png" class="headerSmallImg">
+                </div>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-item dream" value="1">선택 안 함</li>
+                    <li class="dropdown-item dream" value="2">교실 야자</li>
+                    <li class="dropdown-item dream" data-bs-toggle="modal" data-bs-target="#selectClsDesktop" value="3">CSMP / 방과후</li>
+                </ul>
+            </div>
+            <div class="tue">
+                <div class="weekday dreamBold blue">화</div>
+                <div class="date dream blue"></div>
+                <div class="input dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="sizedBox"></div>
+                    <div class="text">
+                        <div class="innerText dream smallFont"></div>
+                    </div>
+                    <img src="./image/chevron-down.png" class="headerSmallImg">
+                </div>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-item dream" value="1">선택 안 함</li>
+                    <li class="dropdown-item dream" value="2">교실 야자</li>
+                    <li class="dropdown-item dream" data-bs-toggle="modal" data-bs-target="#selectClsDesktop" value="3">CSMP / 방과후</li>
+                </ul>
+            </div>
+            <div class="wed">
+                <div class="weekday dreamBold blue">수</div>
+                <div class="date dream blue"></div>
+                <div class="input dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="sizedBox"></div>
+                    <div class="text">
+                        <div class="innerText dream smallFont"></div>
+                    </div>
+                    <img src="./image/chevron-down.png" class="headerSmallImg">
+                </div>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-item dream" value="1">선택 안 함</li>
+                    <li class="dropdown-item dream" value="2">교실 야자</li>
+                    <li class="dropdown-item dream" data-bs-toggle="modal" data-bs-target="#selectClsDesktop" value="3">CSMP / 방과후</li>
+                </ul>
+            </div>
+            <div class="thr">
+                <div class="weekday dreamBold blue">목</div>
+                <div class="date dream blue"></div>
+                <div class="input dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="sizedBox"></div>
+                    <div class="text">
+                        <div class="innerText dream smallFont text-break"></div>
+                    </div>
+                    <img src="./image/chevron-down.png" class="headerSmallImg">
+                </div>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-item dream" value="1">선택 안 함</li>
+                    <li class="dropdown-item dream" value="2">교실 야자</li>
+                    <li class="dropdown-item dream" data-bs-toggle="modal" data-bs-target="#selectClsDesktop" value="3">CSMP / 방과후</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="alarm red dream">
+        - 21:50 이후 해당 날짜의 일정 변경은 불가합니다.
+    </div>
+    <div class="autoWrite dreamBold blue" data-bs-toggle="modal" data-bs-target="#autoSelectClsDesktop">자동 기입 설정</div>
+    <div class="modal fade" id="selectClsDesktop" tabindex="-1" aria-labelledby="selectClsDesktop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content select">
+                <div class="modal-header select">
+                    <h5 class="modal-title dreamBold blue select"></h5>
+                    <img src="./image/close.png" class="btn-close headerSmallerImg select" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <div class="modal-body select">
+                    <ul class="modal-day-schedule select">
+                        <li class="modal-day-csmp-schedule select">
+                            <div class="schedule-cover select">
+                                <div class="scheduleTitle dreamBold blue mediumFont csmp select">CSMP</div>
+                                <div class="scheduleList csmp select">
+                                </div>
+                            </div>
+                        </li>
+                        <br>
+                        <li class="modal-day-afterschool-schedule select">
+                            <div class="schedule-cover select">
+                                <div class="scheduleTitle dreamBold blue mediumFont afterschool select">방과후</div>
+                                <div class="scheduleList afterschool select">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="autoSelectClsDesktop" tabindex="-1" aria-labelledby="autoSelectClsDesktop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content auto" style="display: flex;">
+                <div class="modal-header auto">
+                    <h5 class="modal-title dreamBold blue auto bigFont">자동 기입 설정</h5>
+                    <img src="./image/close.png" class="btn-close headerSmallerImg" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <div class="modal-body auto">
+                    <div class="autoWriteCover">
+                        <div class="mon">
+                            <div class="weekday dreamBold blue">월</div>
+                            <div class="input dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="sizedBox"></div>
+                                <div class="text">
+                                    <div class="innerText dream smallFont"></div>
+                                </div>
+                                <img src="./image/chevron-down.png" class="headerSmallImg">
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item dream" value="1">선택 안 함</li>
+                                <li class="dropdown-item dream" value="2">교실 야자</li>
+                                <li class="dropdown-item dream" value="3">CSMP / 방과후</li>
+                            </ul>
+                        </div>
+                        <div class="tue">
+                            <div class="weekday dreamBold blue">화</div>
+                            <div class="input dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="sizedBox"></div>
+                                <div class="text">
+                                    <div class="innerText dream smallFont"></div>
+                                </div>
+                                <img src="./image/chevron-down.png" class="headerSmallImg">
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item dream" value="1">선택 안 함</li>
+                                <li class="dropdown-item dream" value="2">교실 야자</li>
+                                <li class="dropdown-item dream" value="3">CSMP / 방과후</li>
+                            </ul>
+                        </div>
+                        <div class="wed">
+                            <div class="weekday dreamBold blue">수</div>
+                            <div class="input dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="sizedBox"></div>
+                                <div class="text">
+                                    <div class="innerText dream smallFont"></div>
+                                </div>
+                                <img src="./image/chevron-down.png" class="headerSmallImg">
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item dream" value="1">선택 안 함</li>
+                                <li class="dropdown-item dream" value="2">교실 야자</li>
+                                <li class="dropdown-item dream" value="3">CSMP / 방과후</li>
+                            </ul>
+                        </div>
+                        <div class="thr">
+                            <div class="weekday dreamBold blue">목</div>
+                            <div class="input dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="sizedBox"></div>
+                                <div class="text">
+                                    <div class="innerText dream smallFont text-break"></div>
+                                </div>
+                                <img src="./image/chevron-down.png" class="headerSmallImg">
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item dream" value="1">선택 안 함</li>
+                                <li class="dropdown-item dream" value="2">교실 야자</li>
+                                <li class="dropdown-item dream" value="3">CSMP / 방과후</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <img src="./image/check.png" class="autoWriteConfirm headerSmallerImg">
+                </div>
+            </div>
+            <div class="modal-content autoSecond" style="display: none;">
+                <div class="modal-header auto">
+                    <h5 class="modal-title dreamBold blue auto bigFont">CSMP / 방과후 설정</h5>
+                    <img src="./image/leftArrow.png" class="headerSmallerImg">
+                </div>
+                <div class="modal-body auto">
+                    <div class="autoWriteSelectClsCover">
+                        <ul class="modal-day-schedule auto">
+                            <li class="modal-day-csmp-schedule auto">
+                                <div class="schedule-cover auto">
+                                    <div class="scheduleTitle dreamBold blue mediumFont csmp auto">CSMP</div>
+                                    <div class="scheduleList csmp auto">
+                                    </div>
+                                </div>
+                            </li>
+                            <br>
+                            <li class="modal-day-afterschool-schedule auto">
+                                <div class="schedule-cover auto">
+                                    <div class="scheduleTitle dreamBold blue mediumFont afterschool auto">방과후</div>
+                                    <div class="scheduleList afterschool auto">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

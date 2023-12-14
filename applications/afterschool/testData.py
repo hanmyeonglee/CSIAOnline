@@ -49,8 +49,9 @@ def main02():
     class_day = ["mon", "tue", "wed", "thr"]
     for num in range(0, 11):
         temp = ClassInformation(
-            id=num, class_name=class_names[num], class_location=class_location[num],
-            class_time=f"{choice(class_day)} {fRandint()};", teacher=f"teacher{num}"
+            class_name=class_names[num], class_location=class_location[num],
+            class_time=f"{choice(class_day)} {fRandint()};",
+            class_type=choice(['주문형', '방과후', 'CSMP']), teacher=f"teacher{num}"
         )
         temp.save()
 

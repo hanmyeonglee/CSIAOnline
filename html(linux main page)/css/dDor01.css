@@ -1,0 +1,283 @@
+.dDor01Cover{
+    display: block !important;
+}
+
+
+
+/* modal 부분 */
+
+.modal-content{
+    border-radius: 0 !important;
+    border: 2px solid #06469B !important;
+    background-color: #F3F8FF !important;
+}
+
+.modal-day-schedule > li > div{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 2vw;
+}
+
+.modal-header, .modal-body, .modal-footer{
+    border: none !important;
+}
+
+.modal-header > h5{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.modal-header > img{
+    cursor: pointer;
+}
+
+.modal-body.select{
+    min-height: 25vh;
+    height: fit-content;
+    max-height: 50vh;
+}
+
+/* .modal-footer.select > img{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.modal-footer.select > img:hover{
+    opacity: 1;
+} */
+
+.scheduleList{
+    margin-top: 3.5px;
+}
+
+.scheduleList > div{
+    cursor: pointer;
+}
+
+.scheduleList > div:hover{
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+
+
+/* autowrite modal 부분 */
+
+.modal-lg{
+    width: 60vw !important;
+    max-width: 60vw !important;
+}
+
+.modal-body.auto{
+    width: 90%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+}
+
+.autoWriteCover{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 34vh;
+}
+
+.autoWriteCover > div{
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    height: 40%;
+    place-items: center center;
+}
+
+.autoWriteCover > div > .input{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    place-items: center center;
+    border: 2px solid #06469B;
+    border-right-width: 0px;
+    cursor: pointer;
+}
+
+.autoWriteCover > .thr > .input{
+    border-right-width: 2px;
+}
+
+.autoWriteCover > div > .input:hover{
+    background-color: white;
+}
+
+.autoWriteCover > div > ul.dropdown-menu.show{
+    border-radius: 0;
+    padding: 0;
+    width: 13.5vw !important;
+}
+
+.autoWriteCover > div > ul > li{
+    border: 1px solid #06469B;
+    border-top-width: .5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.autoWriteConfirm{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.autoWriteConfirm:hover{
+    opacity: 1;
+}
+
+.autoWriteSelectClsCover{
+    height: 34vh;
+}
+
+
+
+
+/* dDor01 부분 */
+
+.dDor01Cover{
+    width: 100%;
+    height: 100%;
+}
+
+.dDor01{
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 3vh;
+    padding-top: 4vh;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
+}
+
+.dDor01 > .title{
+    font-size: 2.7vw;
+    width: fit-content;
+    place-self: center center;
+}
+
+.dDor01 > .subtitle{
+    font-size: 2vw;
+    width: fit-content;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    column-gap: 10vw;
+    place-self: center center;
+    place-items: center center;
+}
+
+.dDor01 > .subtitle > img{
+    height: 2.5vh;
+}
+
+.dDor01 > .content{
+    margin-top: 6vh;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: fit-content;
+    place-self: center center;
+}
+
+.dDor01 > .content > div{
+    width: 15vw;
+    height: 20vh;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    place-items: center center;
+}
+
+.dropdown-toggle::after{
+    content: none!important;
+}
+
+.dDor01 > .content > div > .dropdown-menu.show{
+    width: 15vw;
+    background-color: white;
+    border-radius: 0;
+    padding: 0;
+    margin-top: -2px;
+}
+
+.dDor01 > .content > div > .dropdown-menu.show > li{
+    border: 1px solid #06469B;
+    border-top-width: .5px;
+    text-align: center;
+    cursor: pointer;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.dDor01 > .content > div > .dropdown-menu.show > li:hover{
+    background-color: #F3F8FF !important;
+    color: #042047 !important;
+}
+
+.dDor01 > .content > div > .input{
+    border: 2px solid #06469B;
+    border-right-width: 0px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    place-items: center center;
+    cursor: pointer;
+}
+
+.dDor01 > .content > div > .input:hover{
+    background-color: #F3F8FF;
+}
+
+.dDor01 > .content > .thr > .input{
+    border-right-width: 2px;
+}
+
+.dDor01 > .content > div > .input > .text{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center center;
+    padding: 5px;
+}
+
+.dDor01 > .content > div > .input > .text > .innerText{
+    width: fit-content;
+    max-width: 11vw;
+    overflow-x: hidden;
+}
+
+.dDor01 > .content > div > .weekday{
+    font-size: 1.65vw;
+    place-self: end center;
+    position: relative;
+    top: 7px;
+}
+
+.dDor01 > .content > div > .date{
+    font-size: 1.45vw;
+    place-self: start center;
+}
+
+.dDor01Cover > .alarm, .dDor01Cover > .autoWrite{
+    position: fixed;
+    top: 90%;
+    margin-left: 3vw;
+    font-size: 1.8vw;
+}
+
+.dDor01Cover > .autoWrite{
+    right: 4.3%;
+    cursor: pointer;
+}
+
+.dDor01Cover > .autoWrite:hover{
+    text-decoration: underline;
+}
+
+#desktopRightArrow, #desktopLeftArrow{
+    cursor: pointer;
+}

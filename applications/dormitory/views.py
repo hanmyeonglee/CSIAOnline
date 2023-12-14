@@ -3,9 +3,11 @@ from .models import *
 from account.models import *
 from afterschool.models import ClassInformation
 from afterschool.multi_handler import *
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz import timezone
 import json
+
+from django.views.decorators.csrf import csrf_exempt
 
 
 def now(flag=False):
@@ -20,15 +22,33 @@ def now(flag=False):
     return now
 
 
+def verify_date(date: datetime, flag=False):
+    n = now(True)
+    timez = timezone('Asia/Seoul')
+    date = timez.localize(date)
+
+    if flag:
+        if date.weekday() != 0:
+            raise RuntimeError()
+
+    if date >= datetime(n.year + 1, 2, 1, tzinfo=timez) or date <= datetime(n.year, 2, 28, tzinfo=timez):
+        raise RuntimeError()
+
+    if date > n + timedelta(days=21):
+        raise RuntimeError()
+
+    return n
+
+
 def dormitoryuser_default_generator(user: User):
     tmp = DormitoryUser(
         user=user,
         gender="M",
         room=-1,
-        mon_fixed="0",
-        tue_fixed="0",
-        wed_fixed="0",
-        thr_fixed="0",
+        mon_fixed="1",
+        tue_fixed="1",
+        wed_fixed="1",
+        thr_fixed="1",
         last_updated=now(),
     )
     tmp.save()
@@ -38,13 +58,14 @@ def dormitoryuser_default_generator(user: User):
 def nightschedule_default_generator(user: DormitoryUser, date: datetime):
     tmp = NightUserSchedule(
         user=user,
-        schedule="0",
+        schedule="1",
         date=date,
     )
     tmp.save()
     return tmp
 
 
+@csrf_exempt
 def set_fixed_nightschedule(request: HttpRequest):
     result, content = False, ""
     if request.method == "POST":
@@ -97,6 +118,7 @@ def set_fixed_nightschedule(request: HttpRequest):
     }), content_type="application/json")
 
 
+@csrf_exempt
 def set_temp_nightschedule(request: HttpRequest):
     result, content = False, ""
     if request.method == "POST":
@@ -106,6 +128,12 @@ def set_temp_nightschedule(request: HttpRequest):
             session, schedule, date = \
                 recv['session'], recv['schedule'], \
                 datetime.strptime(recv['date'], "%Y-%m-%d")
+
+            n = verify_date(date)
+
+            if recv['date'] == n.strftime("%Y-%m-%d"):
+                if int(n.strftime("%H%M")) >= 2150:
+                    raise RuntimeError()
 
         except:
             content = "invalid data organization"
@@ -158,6 +186,137 @@ def set_temp_nightschedule(request: HttpRequest):
     }), content_type="application/json")
 
 
+@csrf_exempt
+def get_user_inform(request: HttpRequest):
+    result, content = False, ""
+    if request.method == "POST":
+        flag = True
+        try:
+            recv = json.loads(request.body)
+            session = recv['session']
+        except:
+            content = "invalid data organization"
+            flag = False
+
+        if flag:
+            res, login_session = multi_session(
+                LoginSession.objects.filter(session=session)
+            )
+
+            if res:
+                user = login_session.user
+
+                if user.auth == 0:
+                    dusers = DormitoryUser.objects.filter(user=user)
+
+                    if dusers.exists():
+                        duser = dusers[0]
+                        result, content = True, duser.jsonify()
+
+                    else:
+                        duser = dormitoryuser_default_generator(user=user)
+
+                        result, content = True, duser.jsonify()
+
+                else:
+                    content = "invalid auth"
+
+            else:
+                content = "invalid session"
+
+    else:
+        content = "invalid request method"
+
+    return HttpResponse(json.dumps({
+        "result": result,
+        "content": content,
+    }), content_type="application/json")
+
+
+@csrf_exempt
+def get_week_nightschedule(request: HttpRequest):
+    result, content = False, ""
+    if request.method == "POST":
+        flag = True
+        try:
+            recv = json.loads(request.body)
+            session, date = \
+                recv['session'], datetime.strptime(recv['date'], "%Y-%m-%d")
+            # 여기서 date는 그 주의 월요일 날짜
+            # date가 만약 과거라면 새로운 데이터를 만드는 것은 금지
+
+            verify_date(date, flag=True)
+
+        except:
+            content = "invalid data organization"
+            flag = False
+
+        if flag:
+            res, login_session = multi_session(
+                LoginSession.objects.filter(session=session)
+            )
+
+            if res:
+                user = login_session.user
+
+                if user.auth == 0:
+                    dusers = DormitoryUser.objects.filter(user=user)
+                    content = {
+                        'mon': None,
+                        'tue': None,
+                        'wed': None,
+                        'thr': None,
+                    }
+
+                    if dusers.exists():
+                        duser = dusers[0]
+
+                        for i, day in enumerate(content.keys()):
+                            schedules = NightUserSchedule.objects.filter(
+                                user=duser, date=date + timedelta(days=i))
+
+                            if len(schedules) == 1:
+                                schedule = schedules[0]
+
+                            else:
+                                for sc in schedules:
+                                    sc.delete()
+                                schedule = nightschedule_default_generator(
+                                    user=duser, date=date + timedelta(days=i))
+
+                            content[day] = schedule.jsonify()
+
+                        content['message'] = ""
+
+                    else:
+                        duser = dormitoryuser_default_generator(user=user)
+
+                        for i, day in enumerate(content.keys()):
+                            schedule = nightschedule_default_generator(
+                                user=duser, date=date + timedelta(days=i))
+
+                            content[day] = schedule.jsonify()
+
+                        content['message'] = "user information is deleted, plase rewrite the fixed_schedule"
+
+                    result = True
+
+                else:
+                    content = "invalid auth"
+
+            else:
+                content = "invalid session"
+
+    else:
+        content = "invalid request method"
+
+    return HttpResponse(json.dumps({
+        "result": result,
+        "content": content,
+    }), content_type='application/json')
+
+
+@csrf_exempt
 def get_all_nightschedule(request: HttpRequest):
     result, content = False, ""
     if request.method == "POST":
@@ -203,6 +362,7 @@ def get_all_nightschedule(request: HttpRequest):
     }), content_type="application/json")
 
 
+@csrf_exempt
 def set_student_participate(request: HttpRequest):
     result, content = False, ""
     if request.method == "POST":

@@ -7,7 +7,7 @@ urlpatterns = [
     path("supervisor", views.get_today_supervisor, name="supervisor"),
     path("afterschool_user_inform", views.get_afterschooluser_information,
          name="afterschool_user_information"),
-    path("schedule", views.get_afterschooluser_schedule, name="user_schedule"),
+    path("schedule", views.get_week_schedule, name="user_schedule"),
     path("fix", views.set_fixed_schedule, name="fixed_schedule"),
     path("temp", views.set_schedule, name="temp_schedule"),
     path("all_schedules", views.get_all_schedule, name="get_all_schedules"),

@@ -2,9 +2,11 @@ from django.http import HttpRequest, HttpResponse
 from .models import *
 from .multi_handler import *
 from account.models import LoginSession
-from datetime import datetime
-from pytz import timezone
+from datetime import datetime, timedelta
+from dormitory.views import verify_date
 import json
+
+from django.views.decorators.csrf import csrf_exempt
 
 
 def afterschooluser_default_generator(user: User):
@@ -43,6 +45,7 @@ def userweekschedule_default_generator(afterschool_user: AfterSchoolUser, date: 
         return tar
 
 
+@csrf_exempt
 def get_all_class(request: HttpRequest):
     """
     모든 방과후/주문형 강좌 수업에 대한 정보를 제공하는 함수\n
@@ -69,6 +72,7 @@ def get_all_class(request: HttpRequest):
     }), content_type="application/json")
 
 
+@csrf_exempt
 def get_today_supervisor(request: HttpRequest):
     """
     오늘 감독 교사 반환하는 함수
@@ -95,19 +99,20 @@ def get_today_supervisor(request: HttpRequest):
     }), content_type="application/json")
 
 
+@csrf_exempt
 def get_afterschooluser_information(request: HttpRequest):
     """
-    GET의 query를 통해 session을 전달하면 session을 확인한 후 user 정보를 확인해서 반환한다.\n
+    POST를 통해 session을 전달하면 session을 확인한 후 user 정보를 확인해서 반환한다.\n
     유저 정보는 json의 형태로 나타내진다. 대충 클릭해서 확인해봐라.
     """
     result, content = False, ""
     if request.method == "POST":
         ct = request.content_type
 
-        if 'text/plain' in ct:
+        if 'application/json' in ct:
             flag = True
             try:
-                session = request.body.decode()
+                session = json.loads(request.body)['session']
             except:
                 content = "invalid data organization"
                 flag = False
@@ -147,7 +152,8 @@ def get_afterschooluser_information(request: HttpRequest):
     }), content_type="application/json")
 
 
-def get_afterschooluser_schedule(request: HttpRequest):
+@csrf_exempt
+def get_week_schedule(request: HttpRequest):
     """
     유저의 세션을 받아서 스케쥴을 반환하는 함수
     """
@@ -162,8 +168,13 @@ def get_afterschooluser_schedule(request: HttpRequest):
                 session, date = recv["session"], datetime.strptime(
                     recv["date"], "%Y-%m-%d"
                 )
-            except:
-                content = "invalid data organization"
+                # 여기서 date는 그 주의 월요일 날짜
+                # date가 만약 과거라면 새로운 데이터를 만드는 것은 금지
+
+                verify_date(date, flag=True)
+
+            except Exception as e:
+                content = "invalid data organization" + e
                 flag = False
 
             if flag:
@@ -175,28 +186,41 @@ def get_afterschooluser_schedule(request: HttpRequest):
 
                     if user.auth == 0:
                         users = AfterSchoolUser.objects.filter(user=user)
+                        content = {
+                            "mon": None,
+                            "tue": None,
+                            "wed": None,
+                            "thr": None,
+                        }
 
                         if len(users) == 1:
-                            schedules = UserWeekSchedule.objects.filter(
-                                user=users[0], date=date)
+                            for i, day in enumerate(content.keys()):
+                                schedules = UserWeekSchedule.objects.filter(
+                                    user=users[0], date=date + timedelta(days=i))
 
-                            if len(schedules) == 1:
-                                result, content = True, schedules[0].jsonify()
+                                if len(schedules) == 1:
+                                    content[day] = schedules[0].jsonify()
 
-                            else:
-                                for schedule in schedules:
-                                    schedule.delete()
-                                result, content = True, userweekschedule_default_generator(
-                                    afterschool_user=users[0], date=date).jsonify()
-                            # content = "server error, rewrite the informations"
+                                else:
+                                    for schedule in schedules:
+                                        schedule.delete()
+                                    content[day] = userweekschedule_default_generator(
+                                        afterschool_user=users[0], date=date + timedelta(days=i)).jsonify()
+
+                            content['message'] = ""
 
                         else:
                             for usr in users:
                                 usr.delete()
                             temp = afterschooluser_default_generator(user=user)
-                            userweekschedule_default_generator(
-                                afterschool_user=temp, date=date)
-                            content = "server error, rewrite the informations"
+
+                            for i, day in enumerate(content.keys()):
+                                content[day] = userweekschedule_default_generator(
+                                    afterschool_user=temp, date=date + timedelta(days=i)).jsonify()
+
+                            content['message'] = "user information is deleted, plase rewrite the fixed_schedule"
+
+                        result = True
 
                     else:
                         content = "invalid auth"
@@ -212,10 +236,11 @@ def get_afterschooluser_schedule(request: HttpRequest):
 
     return HttpResponse(json.dumps({
         "result": result,
-        "schedule": content,
+        "content": content,
     }), content_type="application/json")
 
 
+@csrf_exempt
 def set_fixed_schedule(request: HttpRequest):
     """
     POST로 스케쥴이 오면 fixed하게 고정하는 역할
@@ -228,7 +253,10 @@ def set_fixed_schedule(request: HttpRequest):
             flag = True
             try:
                 data = json.loads(request.body)
-                session, fixed_schedule = data['session'], data['fixed_schedule']
+                print(data)
+                session, mon_fixed, tue_fixed, wed_fixed, thr_fixed = \
+                    data['session'], data['mon_fixed'], \
+                    data['tue_fixed'], data['wed_fixed'], data['thr_fixed'],
             except:
                 content = "invalid data organization"
                 flag = False
@@ -252,10 +280,10 @@ def set_fixed_schedule(request: HttpRequest):
                         else:
                             afterschool_user = users[0]
 
-                        afterschool_user.mon_fixed = fixed_schedule['mon_fixed']
-                        afterschool_user.tue_fixed = fixed_schedule['tue_fixed']
-                        afterschool_user.wed_fixed = fixed_schedule['wed_fixed']
-                        afterschool_user.thr_fixed = fixed_schedule['thr_fixed']
+                        afterschool_user.mon_fixed = mon_fixed
+                        afterschool_user.tue_fixed = tue_fixed
+                        afterschool_user.wed_fixed = wed_fixed
+                        afterschool_user.thr_fixed = thr_fixed
                         afterschool_user.save()
 
                     else:
@@ -276,6 +304,7 @@ def set_fixed_schedule(request: HttpRequest):
     }), content_type="application/json")
 
 
+@csrf_exempt
 def set_schedule(request: HttpRequest):
     """
     고정된 건 아니고 그날그날 신청사항을 받음
@@ -289,10 +318,18 @@ def set_schedule(request: HttpRequest):
         if 'application/json' in ct:
             flag = True
             try:
-                data = json.loads(request.body)
+                recv = json.loads(request.body)
+                print(recv)
                 session, temp_schedule, date = \
-                    data['session'], data['temp_schedule'], \
-                    datetime.strptime(data['date'], "%Y-%m-%d")
+                    recv['session'], recv['temp_schedule'], \
+                    datetime.strptime(recv['date'], "%Y-%m-%d")
+
+                n = verify_date(date)
+
+                if recv['date'] == n.strftime("%Y-%m-%d"):
+                    if n.hour >= 17:
+                        raise RuntimeError()
+
             except:
                 content = "invalid data organization"
                 flag = False
@@ -322,16 +359,20 @@ def set_schedule(request: HttpRequest):
                             else:
                                 schedule = schedules[0]
 
-                            schedule.schedule = temp_schedule
-                            schedule.save()
-
-                            result = True
-
                         else:
                             for user in users:
                                 user.delete()
-                            afterschooluser_default_generator(user=user)
-                            content = "server error, rewrite the informations"
+                            auser = afterschooluser_default_generator(
+                                user=user)
+                            schedule = userweekschedule_default_generator(
+                                afterschool_user=auser, date=date)
+
+                            content = "user information is deleted, plase rewrite the fixed_schedule"
+
+                        schedule.schedule = temp_schedule
+                        schedule.save()
+
+                        result = True
 
                     else:
                         content = "invalid auth"
@@ -352,6 +393,7 @@ def set_schedule(request: HttpRequest):
     }), content_type="application/json")
 
 
+@csrf_exempt
 def get_all_schedule(request: HttpRequest):
     result, content = False, ""
 
@@ -407,6 +449,7 @@ def get_all_schedule(request: HttpRequest):
     }))
 
 
+@csrf_exempt
 def set_student_participate(request: HttpRequest):
     result, content = False, ""
 

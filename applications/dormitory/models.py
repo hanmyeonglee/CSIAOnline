@@ -23,19 +23,13 @@ class DormitoryUser(models.Model):
 
     def jsonify(self):
         return {
-            "user": self.user.name,
+            "user": self.user.jsonify(),
             "gender": self.gender,
             "room": self.room,
             "mon_fixed": self.mon_fixed,
             "tue_fixed": self.tue_fixed,
             "wed_fixed": self.wed_fixed,
             "thr_fixed": self.thr_fixed,
-        }
-
-    def simple_jsonify(self):
-        return {
-            "user": self.user.name,
-            "gender": self.gender,
         }
 
 
@@ -54,7 +48,6 @@ class NightUserSchedule(models.Model):
 
     def jsonify(self):
         return {
-            "user": self.user.simple_jsonify(),
             "schedule": self.schedule,
             "id": self.id,
         }

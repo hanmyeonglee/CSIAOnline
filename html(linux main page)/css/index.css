@@ -1,0 +1,269 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css); 
+.nanum { font-family: 'Nanum Barun Gothic' !important; }
+.nanumBold { font-family: 'Nanum Barun Gothic' !important; font-weight: 700 !important; }
+
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+.dream{
+    font-family: 'S-CoreDream-3Light';
+    color: #042047;
+}
+.dreamBold{
+    font-family: 'S-CoreDream-3Light';
+    font-weight: 700;
+    color: #042047;
+}
+.blue{
+    color: #06469B !important;
+}
+.red{
+    color: #AF1717 !important;
+}
+
+html, body, .main{
+    overflow: hidden;
+    font-family: 'Nanum Barun Gothic';
+}
+
+.main{
+    width: 100vw;
+    height: 100vh;
+}
+
+
+
+/* header 부분 */
+
+.headerBiggerImg{
+    height: 6vh !important;
+}
+
+.headerBigImg{
+    height: 5vh !important;
+}
+
+.headerMediumImg{
+    height: 3.5vh !important;
+}
+
+.headerSmallImg{
+    height: 3vh !important;
+}
+
+.headerSmallerImg{
+    height: 2.2vh !important;
+}
+
+.header{
+    width: 100vw;
+    height: 11vh;
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+.rightHeader{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    max-width: 50vw;
+    column-gap: 1.7rem;
+}
+
+.rightHeaderFirst{
+    cursor: pointer;
+}
+
+.rightHeaderFirst > img{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 4.5vh!important;
+}
+
+.rightHeaderFirst > img:hover{
+    border-radius: 3px;
+    background-color: #E0E0E0;
+}
+
+.rightHeaderSecond{
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 1.5rem;
+    cursor: pointer;
+}
+
+.rightHeaderSecond > *{
+    place-self: center center;
+}
+
+.leftHeader{
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    column-gap: 0.5rem;
+}
+
+.leftHeader > *{
+    place-self: center center;
+}
+
+
+
+/* cover 부분 */
+
+.cover{
+    height: 89vh;
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.collapseAnimation{
+    display: none;
+    width: 0px;
+}
+
+
+
+/* sidebar 부분 */
+
+.bigFont{
+    font-size: 1.6rem !important;
+}
+
+.mediumFont{
+    font-size: 1.38rem !important;
+}
+
+.smallFont{
+    font-size: 1.1rem !important;
+}
+
+.sidebar{
+    position: relative;
+    width: fit-content;
+    min-width: 19vw;
+    max-width: 26vw;
+    height: 89vh;
+    background-color: #F3F8FF;
+    /* transition: left .6s ease-in-out; */
+}
+
+.p-13{
+    padding: 1rem;
+    padding-left: 0.3rem!important;
+}
+
+.sidebarBtn{
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 10px;
+}
+
+.sidebarBtn > img{
+    height: 3.98vh;
+}
+
+.sidebarSubList > li{
+    margin-left: 2rem;
+    margin-top: 0.87rem;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    column-gap: 15.8px;
+}
+
+.sidebarSubList > li > *{
+    place-self: center center;
+}
+
+.sidebarSubList > li > span:hover{
+    text-decoration: underline;
+    font-weight: bold;
+    color: #06469B;
+}
+
+
+
+/* mainpage 부분 */
+
+.mainpage{
+    height: 90vh;
+}
+
+
+
+/* default 부분 */
+
+.default, .dSch01Cover, .dSch02Cover, .dDor01Cover{
+    display: none;
+}
+
+
+
+
+/* loading */
+
+.loader {
+    display: inline-block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+}
+.loader div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #06469B;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.loader div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+.loader div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.loader div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.loader div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+  }
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(24px, 0);
+    }
+}

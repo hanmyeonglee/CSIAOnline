@@ -1,0 +1,382 @@
+<style>
+    .dSch02Cover{
+    display: block !important;
+}
+
+
+
+/* modal 부분 */
+
+.modal-content{
+    border-radius: 0 !important;
+    border: 2px solid #06469B !important;
+    background-color: #F3F8FF !important;
+}
+
+.modal-day-schedule > li > div{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 2vw;
+}
+
+.modal-header, .modal-body, .modal-footer{
+    border: none !important;
+}
+
+.modal-header > h5{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.modal-header > img{
+    cursor: pointer;
+}
+
+.modal-body.select{
+    min-height: 25vh;
+    height: fit-content;
+    max-height: 50vh;
+}
+
+/* .modal-footer.select > img{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.modal-footer.select > img:hover{
+    opacity: 1;
+} */
+
+.scheduleList{
+    margin-top: 3.5px;
+}
+
+.scheduleList > div{
+    cursor: pointer;
+}
+
+.scheduleList > div:hover{
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+
+
+/* autowrite modal 부분 */
+
+.modal-lg{
+    width: 60vw !important;
+    max-width: 60vw !important;
+}
+
+.modal-body.auto{
+    width: 90%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+}
+
+.autoWriteCover{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 34vh;
+}
+
+.autoWriteCover > div{
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    height: 40%;
+    place-items: center center;
+}
+
+.autoWriteCover > div > .input{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    place-items: center center;
+    border: 2px solid #06469B;
+    border-right-width: 0px;
+    cursor: pointer;
+}
+
+.autoWriteCover > .thr > .input{
+    border-right-width: 2px;
+}
+
+.autoWriteCover > div > .input:hover{
+    background-color: white;
+}
+
+.autoWriteCover > div > ul.dropdown-menu.show{
+    border-radius: 0;
+    padding: 0;
+    width: 13.5vw !important;
+}
+
+.autoWriteCover > div > ul > li{
+    border: 1px solid #06469B;
+    border-top-width: .5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.autoWriteConfirm{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.autoWriteConfirm:hover{
+    opacity: 1;
+}
+
+.autoWriteSelectClsCover{
+    height: 34vh;
+}
+
+
+
+
+/* dSch02 부분 */
+
+.dSch02Cover{
+    width: 100%;
+    height: 100%;
+}
+
+.dSch02{
+    display: grid;
+    grid-auto-flow: row;
+    padding-top: 4vh;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
+}
+
+.dSch02 > .title{
+    width: 100%;
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    place-self: center center;
+    text-align: center;
+}
+
+.dSch02 > .title > .subtitle{
+    font-size: 2rem;
+}
+
+.dSch02 > .title > .date{
+    font-size: 1.4rem;
+}
+
+.dSch02 > .title > .utility{
+    position: absolute;
+    right: 3%;
+    cursor: pointer;
+}
+
+.dSch02 > .title > .utility > div:hover{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.dSch02 > .content{
+    display: grid;
+    grid-template-columns: .7fr .7vw 1fr repeat(5, 2vw 1fr);
+    width: 100%;
+    place-self: center center;
+}
+
+.dSch02 > .content.roomName{
+    margin-top: 7vh;
+}
+
+.dSch02 > .content.roomName > div{
+    text-align: center;
+}
+
+.dSch02 > .content > .cls{
+    height: 32vh;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    row-gap: 5.5vh;
+    margin-top: 6vh;
+    margin-bottom: 2vh;
+}
+
+.dSch02 > .content > .cls > div{
+    border: 1.2px solid #06469B;
+}
+
+.dSch02 > .content > .cls > div:hover{
+    background-color: #F3F8FF;
+}
+
+.dSch02 > .content > .clsTime > div{
+    border: none;
+    width: fit-content;
+    height: fit-content;
+    place-self: center end;
+}
+
+.dSch02 > .content > .clsTime > div:hover{
+    background-color: white;
+}
+
+.dSch02 > .content > .sizedBox{
+    width: 0;
+    height: 100%;
+    border-right: 1.5px solid #06469B;
+    place-self: center center
+}
+
+.dSch02 > .content > .firstSizedBox{
+    border: none;
+}
+
+.dSch02Cover > .alarm{
+    position: fixed;
+    top: 90%;
+    margin-left: 3vw;
+    font-size: 1.8vw;
+}
+
+.dSch02Cover > .exbtn{
+    position: fixed;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 5vh;
+    right: 3%;
+    bottom: 3%;
+}
+
+.dSch02Cover > .exbtn > *{
+    place-self: start end;
+}
+
+.dSch02Cover > .exbtn > .information{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 7.5px;
+}
+
+.dSch02Cover > .exbtn > .apply{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.dSch02Cover > .exbtn > .apply:hover{
+    opacity: 1;
+}
+
+.dSch02Cover > .exbtn > .information > .exInform{
+    border: 1.5px solid #06469B;
+    background-color: #97b1d4;
+    width: 90%;
+    height: 80%;
+    place-self: center center;
+}
+
+.dSch02Cover .booked{
+    background-color: #97b1d4;
+}
+</style>
+<div class="dSch02Cover">
+    <div class="dSch02">
+        <div class="title">
+            <div class="subtitle dreamBold blue">세미나실 신청</div>
+            <div class="week dreamBold blue">12.01</div>
+            <div class="utility">
+                <div class="firstU dream blue bigFont">신청 취소</div>
+                <div class="secondU dream blue bigFont">명단 수정</div>
+            </div>
+        </div>
+        <div class="content roomName">
+            <div></div>
+            <div></div>
+            <div class="dreamBold blue bigFont">201</div>
+            <div></div>
+            <div class="dreamBold blue bigFont">202</div>
+            <div></div>
+            <div class="dreamBold blue bigFont">203</div>
+            <div></div>
+            <div class="dreamBold blue bigFont">204</div>
+            <div></div>
+            <div class="dreamBold blue bigFont">205</div>
+            <div></div>
+            <div class="dreamBold blue bigFont">206</div>
+        </div>
+        <div class="content mainCover">
+            <div class="clsTime cls">
+                <div class="first dreamBold blue bigFont">1교시</div>
+                <div class="second dreamBold blue bigFont">2교시</div>
+                <div class="third dreamBold blue bigFont">3교시</div>
+            </div>
+            <div class="sizedBox firstSizedBox"></div>
+            <div class="clsOne cls">
+                <div class="first dreamBold blue bigFont"></div>
+                <div class="second dreamBold blue bigFont"></div>
+                <div class="third dreamBold blue bigFont"></div>
+            </div>
+            <div class="sizedBox"></div>
+            <div class="clsTwo cls">
+                <div class="first dreamBold blue bigFont"></div>
+                <div class="second dreamBold blue bigFont"></div>
+                <div class="third dreamBold blue bigFont"></div>
+            </div>
+            <div class="sizedBox"></div>
+            <div class="clsThree cls">
+                <div class="first dreamBold blue bigFont"></div>
+                <div class="second dreamBold blue bigFont"></div>
+                <div class="third dreamBold blue bigFont"></div>
+            </div>
+            <div class="sizedBox"></div>
+            <div class="clsFour cls">
+                <div class="first dreamBold blue bigFont"></div>
+                <div class="second dreamBold blue bigFont"></div>
+                <div class="third dreamBold blue bigFont"></div>
+            </div>
+            <div class="sizedBox"></div>
+            <div class="clsFive cls">
+                <div class="first dreamBold blue bigFont"></div>
+                <div class="second dreamBold blue bigFont"></div>
+                <div class="third dreamBold blue bigFont"></div>
+            </div>
+            <div class="sizedBox"></div>
+            <div class="clsSix cls">
+                <div class="first dreamBold blue bigFont"></div>
+                <div class="second dreamBold blue bigFont"></div>
+                <div class="third dreamBold blue bigFont"></div>
+            </div>
+        </div>
+    </div>
+    <div class="alarm red dream">
+        - 17:00 이후 해당 날짜의 일정 변경은 불가합니다.
+    </div>
+    <div class="exbtn">
+        <img src="./image/rightFullArrow.png" class="apply headerMediumImg" data-bs-toggle="modal" data-bs-target="#applyModal">
+        <div class="information">
+            <div class="exInform"></div>
+            <div class="expl mediumFont dreamBold blue">예약 마감</div>
+        </div>
+    </div>
+    <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-5 dreamBold blue" id="appplyModalLabel">세미나실 신청 12.01</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

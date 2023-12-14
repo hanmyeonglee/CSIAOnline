@@ -10,7 +10,7 @@ class SeatNumber(models.Model):
         number -> 학번\n
         seat_number -> 자리 번호
     """
-    number = models.CharField(max_length=10, primary_key=True)
+    number = models.CharField(max_length=16, primary_key=True)
     seat_number = models.SmallIntegerField(unique=True)
 
 
@@ -41,10 +41,10 @@ class ClassInformation(models.Model):
         class_time -> 수업 시간, 000 ~ 111까지 binary로 나타냄(저장할 땐 숫자)\n
         teacher -> 수업 교사
     """
-    id = models.SmallIntegerField(primary_key=True)
     class_name = models.CharField(max_length=255)
     class_location = models.CharField(max_length=255)
     class_time = models.CharField(max_length=64)
+    class_type = models.CharField(max_length=64)
     teacher = models.CharField(max_length=64)
 
     def jsonify(self):
@@ -54,6 +54,7 @@ class ClassInformation(models.Model):
             "class_location": self.class_location,
             "class_time": self.class_time,
             "teacher": self.teacher,
+            "class_type": self.class_type,
         }
 
 
@@ -67,10 +68,10 @@ class AfterSchoolUser(models.Model):
         마지막 업데이트 날짜 지정해서 학기/년도마다 업데이트 메시지 날려주기
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    mon_fixed = models.CharField(max_length=10)
-    tue_fixed = models.CharField(max_length=10)
-    wed_fixed = models.CharField(max_length=10)
-    thr_fixed = models.CharField(max_length=10)
+    mon_fixed = models.CharField(max_length=16)
+    tue_fixed = models.CharField(max_length=16)
+    wed_fixed = models.CharField(max_length=16)
+    thr_fixed = models.CharField(max_length=16)
 
     def __str__(self):
         return f"{self.mon_fixed}|{self.tue_fixed}|{self.wed_fixed}|{self.thr_fixed} : {self.user}"
@@ -99,7 +100,7 @@ class UserWeekSchedule(models.Model):
     """
     user = models.ForeignKey(
         AfterSchoolUser, on_delete=models.CASCADE)
-    schedule = models.CharField(max_length=10)
+    schedule = models.CharField(max_length=16)
     date = models.DateField()
     participate = models.BooleanField(default=False)
 
@@ -108,7 +109,6 @@ class UserWeekSchedule(models.Model):
 
     def jsonify(self):
         return {
-            "date": self.date.strftime('%Y-%m-%d'),
             "schedule": self.schedule,
             "id": self.id,
         }
@@ -121,10 +121,22 @@ class SeminarRoomBook(models.Model):
     Todo:\n
         세미나실 예약 기능 추가
     """
-    room1 = models.CharField(max_length=255)
-    room2 = models.CharField(max_length=255)
-    room3 = models.CharField(max_length=255)
-    room4 = models.CharField(max_length=255)
-    room5 = models.CharField(max_length=255)
-    room6 = models.CharField(max_length=255)
-    date = models.DateField()
+    room1_1 = models.CharField(max_length=64, default="")
+    room1_2 = models.CharField(max_length=64, default="")
+    room1_3 = models.CharField(max_length=64, default="")
+    room2_1 = models.CharField(max_length=64, default="")
+    room2_2 = models.CharField(max_length=64, default="")
+    room2_3 = models.CharField(max_length=64, default="")
+    room3_1 = models.CharField(max_length=64, default="")
+    room3_2 = models.CharField(max_length=64, default="")
+    room3_3 = models.CharField(max_length=64, default="")
+    room4_1 = models.CharField(max_length=64, default="")
+    room4_2 = models.CharField(max_length=64, default="")
+    room4_3 = models.CharField(max_length=64, default="")
+    room5_1 = models.CharField(max_length=64, default="")
+    room5_2 = models.CharField(max_length=64, default="")
+    room5_3 = models.CharField(max_length=64, default="")
+    room6_1 = models.CharField(max_length=64, default="")
+    room6_2 = models.CharField(max_length=64, default="")
+    room6_3 = models.CharField(max_length=64, default="")
+    date = models.DateField(unique=True)
