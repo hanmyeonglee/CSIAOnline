@@ -5,7 +5,10 @@ from afterschool.multi_handler import multi_session
 from hashlib import sha256
 from datetime import datetime
 from pytz import timezone
+from afterschool.views import auth_binarify
 import json
+
+from django.views.decorators.csrf import csrf_exempt
 
 
 def hash256(text):
@@ -15,6 +18,7 @@ def hash256(text):
     return sha256(sha256(text).digest()).hexdigest()
 
 
+@csrf_exempt
 def signup(request: HttpRequest):
     """
     회원가입하는 함수\n
@@ -63,6 +67,7 @@ def signup(request: HttpRequest):
     }))
 
 
+@csrf_exempt
 def login(request: HttpRequest):
     """
     로그인하는 함수, 성공하면 세션을 등록한다.\n
@@ -104,14 +109,12 @@ def login(request: HttpRequest):
         content = "invalid request method"
 
     return HttpResponse(json.dumps({
-        "operation": "login",
-        "body": {
-            "result": result,
-            "content": content,
-        }
+        "result": result,
+        "content": content,
     }))
 
 
+@csrf_exempt
 def session_confirm(request: HttpRequest):
     """
     세션 확인하는 함수\n
@@ -136,9 +139,17 @@ def session_confirm(request: HttpRequest):
                 if len(user_session) == 1:
                     result = True
 
-                    # 세션 로그인 시 새로운 세션 발급하는 코드, 그런데 이거 다중 로그인이 힘들어서 주석처리함, 필요하면 그때 해제하삼
-                    content = generate()
-                    user_session[0].initialize_session(session=content)
+                    new_session = generate()
+                    res = user_session[0].initialize_session(
+                        session=new_session)
+                    if res:
+                        content = {
+                            "session": session,
+                            "auth": auth_binarify(user_session[0].user.auth),
+                        }
+
+                    else:
+                        content = "server error"
 
                 elif len(user_session) > 1:
                     content = "invalid session, relogin"
@@ -156,14 +167,12 @@ def session_confirm(request: HttpRequest):
         content = "invalid request method"
 
     return HttpResponse(json.dumps({
-        "operation": "login",
-        "body": {
-            "result": result,
-            "content": content,
-        }
+        "result": result,
+        "content": content,
     }))
 
 
+@csrf_exempt
 def get_user_information(request: HttpRequest):
     """
     GET의 query를 통해 session을 전달하면 session을 확인한 후 user 정보를 확인해서 반환한다.\n

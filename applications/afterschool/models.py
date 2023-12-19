@@ -116,8 +116,10 @@ class UserWeekSchedule(models.Model):
 
 class SeminarRoomBook(models.Model):
     """
-    room1~6 : 세미나실 룸 예약한 User id를 /로 구분해서 저장한다.\n
+    room1~6_1~3 : 세미나실 룸 예약한 User id를 /로 구분해서 저장한다.\n
     date : 세머니실 예약 날짜\n
+    예를 들어 유저 아이디 1, 2, 3이 room1을 1교시에 사용하고, 선생님께 수락되었다면,\n
+    1/2/3=1, 수락 안됐으면 1/2/3=0으로 처리된다.\n
     Todo:\n
         세미나실 예약 기능 추가
     """
@@ -140,3 +142,49 @@ class SeminarRoomBook(models.Model):
     room6_2 = models.CharField(max_length=64, default="")
     room6_3 = models.CharField(max_length=64, default="")
     date = models.DateField(unique=True)
+
+    def simple_jsonify(self):
+        return {
+            "room1_1": bool(self.room1_1),
+            "room1_2": bool(self.room1_2),
+            "room1_3": bool(self.room1_3),
+            "room2_1": bool(self.room2_1),
+            "room2_2": bool(self.room2_2),
+            "room2_3": bool(self.room2_3),
+            "room3_1": bool(self.room3_1),
+            "room3_2": bool(self.room3_2),
+            "room3_3": bool(self.room3_3),
+            "room4_1": bool(self.room4_1),
+            "room4_2": bool(self.room4_2),
+            "room4_3": bool(self.room4_3),
+            "room5_1": bool(self.room5_1),
+            "room5_2": bool(self.room5_2),
+            "room5_3": bool(self.room5_3),
+            "room6_1": bool(self.room6_1),
+            "room6_2": bool(self.room6_2),
+            "room6_3": bool(self.room6_3),
+            "date": self.date.strftime("%Y-%m-%d"),
+        }
+
+    def jsonify(self):
+        return {
+            "room1_1": self.room1_1,
+            "room1_2": self.room1_2,
+            "room1_3": self.room1_3,
+            "room2_1": self.room2_1,
+            "room2_2": self.room2_2,
+            "room2_3": self.room2_3,
+            "room3_1": self.room3_1,
+            "room3_2": self.room3_2,
+            "room3_3": self.room3_3,
+            "room4_1": self.room4_1,
+            "room4_2": self.room4_2,
+            "room4_3": self.room4_3,
+            "room5_1": self.room5_1,
+            "room5_2": self.room5_2,
+            "room5_3": self.room5_3,
+            "room6_1": self.room6_1,
+            "room6_2": self.room6_2,
+            "room6_3": self.room6_3,
+            "date": self.date.strftime("%Y-%m-%d"),
+        }

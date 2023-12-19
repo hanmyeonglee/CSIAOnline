@@ -10,6 +10,10 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 
+def auth_binarify(auth):
+    return bin(auth)[2:].ljust(8, '0')
+
+
 def now(flag=False):
     """
     현재 서버 시간을 반환해주는 함수\n
@@ -87,7 +91,7 @@ def set_fixed_nightschedule(request: HttpRequest):
             if res:
                 user = login_session.user
 
-                if user.auth == 0:
+                if auth_binarify(user.auth) == "00000000":
                     dusers = DormitoryUser.objects.filter(
                         user=user)
 
@@ -147,7 +151,7 @@ def set_temp_nightschedule(request: HttpRequest):
             if res:
                 user = login_session.user
 
-                if user.auth == 0:
+                if auth_binarify(user.auth) == "00000000":
                     dusers = DormitoryUser.objects.filter(user=user)
 
                     if dusers.exists():
@@ -206,7 +210,7 @@ def get_user_inform(request: HttpRequest):
             if res:
                 user = login_session.user
 
-                if user.auth == 0:
+                if auth_binarify(user.auth) == "00000000":
                     dusers = DormitoryUser.objects.filter(user=user)
 
                     if dusers.exists():
@@ -259,7 +263,7 @@ def get_week_nightschedule(request: HttpRequest):
             if res:
                 user = login_session.user
 
-                if user.auth == 0:
+                if auth_binarify(user.auth) == "00000000":
                     dusers = DormitoryUser.objects.filter(user=user)
                     content = {
                         'mon': None,
@@ -337,7 +341,7 @@ def get_all_nightschedule(request: HttpRequest):
             if res:
                 user = login_session.user
 
-                if user.auth >= 2:
+                if auth_binarify(user.auth)[6] == "1":
                     schedules = NightUserSchedule.objects.filter(date=date)
                     content = []
 
@@ -382,7 +386,7 @@ def set_student_participate(request: HttpRequest):
             if res:
                 user = login_session.user
 
-                if user.auth >= 2:
+                if auth_binarify(user.auth)[6] == "1":
                     sch = NightUserSchedule.objects.filter(id=id)
 
                     if sch.exists():

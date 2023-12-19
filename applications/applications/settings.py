@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'afterschool.apps.AfterschoolConfig',
     'dormitory.apps.DormitoryConfig',
     'corsheaders',
+    'background_tasks',
 ]
 
 MIDDLEWARE = [

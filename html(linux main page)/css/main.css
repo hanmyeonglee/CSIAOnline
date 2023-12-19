@@ -23,10 +23,14 @@
 .red{
     color: #AF1717 !important;
 }
+.black{
+    color: #042047 !important;
+}
 
 html, body, .main{
     overflow: hidden;
     font-family: 'Nanum Barun Gothic';
+    cursor: default;
 }
 
 .main{
@@ -85,6 +89,7 @@ html, body, .main{
     left: 50%;
     transform: translate(-50%, -50%);
     height: 4.5vh!important;
+    z-index: 999;
 }
 
 .rightHeaderFirst > img:hover{
@@ -97,6 +102,7 @@ html, body, .main{
     grid-auto-flow: column;
     column-gap: 1.5rem;
     cursor: pointer;
+    z-index: 999;
 }
 
 .rightHeaderSecond > *{
@@ -266,4 +272,19 @@ html, body, .main{
     100% {
         transform: translate(24px, 0);
     }
+}
+
+
+
+/* alert 부분 */
+
+.alert{
+    display: none;
+    position: fixed !important;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+    transition: opacity .5s linear;
+    opacity: 0;
+    z-index: 9999;
 }

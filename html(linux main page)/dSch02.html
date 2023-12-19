@@ -1,5 +1,5 @@
 <style>
-    .dSch02Cover{
+.dSch02Cover{
     display: block !important;
 }
 
@@ -39,28 +39,6 @@
     max-height: 50vh;
 }
 
-/* .modal-footer.select > img{
-    opacity: 0.5;
-    cursor: pointer;
-}
-
-.modal-footer.select > img:hover{
-    opacity: 1;
-} */
-
-.scheduleList{
-    margin-top: 3.5px;
-}
-
-.scheduleList > div{
-    cursor: pointer;
-}
-
-.scheduleList > div:hover{
-    font-weight: 700;
-    text-decoration: underline;
-}
-
 
 
 /* autowrite modal 부분 */
@@ -70,71 +48,78 @@
     max-width: 60vw !important;
 }
 
-.modal-body.auto{
-    width: 90%;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 0;
+.modal-header{
+    padding-bottom: 0 !important;
 }
 
-.autoWriteCover{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    height: 34vh;
+.modal-body > .subtitle{
+    margin-bottom: 3vh;
 }
 
-.autoWriteCover > div{
-    display: grid;
-    grid-template-rows: auto 1fr;
+.studentList{
     width: 100%;
-    height: 40%;
-    place-items: center center;
+    height: 20vh;
+    overflow-y: scroll;
 }
 
-.autoWriteCover > div > .input{
-    width: 100%;
-    height: 100%;
+.studentList > .studentForm{
+    width: 70%;
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr;
-    place-items: center center;
-    border: 2px solid #06469B;
-    border-right-width: 0px;
-    cursor: pointer;
+    grid-template-columns: .4fr 3fr 3fr .5fr;
+    margin-bottom: 1vh;
+    column-gap: 1vw;
 }
 
-.autoWriteCover > .thr > .input{
-    border-right-width: 2px;
-}
-
-.autoWriteCover > div > .input:hover{
-    background-color: white;
-}
-
-.autoWriteCover > div > ul.dropdown-menu.show{
-    border-radius: 0;
-    padding: 0;
-    width: 13.5vw !important;
-}
-
-.autoWriteCover > div > ul > li{
-    border: 1px solid #06469B;
-    border-top-width: .5px;
+.studentForm > .input{
+    border: 1px solid black !important;
+    height: 5vh;
+    cursor: text;
+    background-color: #F3F8FF;
     text-align: center;
+}
+
+.studentForm > .number{
+    width: fit-content;
+    height: fit-content;
+    place-self: center center;
+}
+
+.studentForm > .studentDelete{
+    place-self: center center;
     cursor: pointer;
 }
 
-.autoWriteConfirm{
+.studentList > .addStudent{
+    width: 15vw;
+    height: 5vh;
+    border: 1px solid black;
+    position: relative;
+    left: 37%;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+.studentList > .addStudent:hover{
+    background-color: #97b1d4;
+    user-select: none;
+}
+
+.studentList > .addStudent > div{
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-footer > .applyServer{
     opacity: 0.5;
     cursor: pointer;
 }
 
-.autoWriteConfirm:hover{
+.modal-footer > .applyServer:hover{
     opacity: 1;
-}
-
-.autoWriteSelectClsCover{
-    height: 34vh;
 }
 
 
@@ -208,6 +193,7 @@
 
 .dSch02 > .content > .cls > div{
     border: 1.2px solid #06469B;
+    cursor: pointer;
 }
 
 .dSch02 > .content > .cls > div:hover{
@@ -219,6 +205,7 @@
     width: fit-content;
     height: fit-content;
     place-self: center end;
+    cursor: default;
 }
 
 .dSch02 > .content > .clsTime > div:hover{
@@ -246,7 +233,7 @@
 .dSch02Cover > .exbtn{
     position: fixed;
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 0;
     row-gap: 5vh;
     right: 3%;
     bottom: 3%;
@@ -279,8 +266,17 @@
     place-self: center center;
 }
 
-.dSch02Cover .booked{
+.booked{
     background-color: #97b1d4;
+    pointer-events: none;
+}
+
+.seminarSelect{
+    background-color: chartreuse !important;
+}
+
+.seminarSelect:hover{
+    background-color: chartreuse !important;
 }
 </style>
 <div class="dSch02Cover">
@@ -310,45 +306,45 @@
         </div>
         <div class="content mainCover">
             <div class="clsTime cls">
-                <div class="first dreamBold blue bigFont">1교시</div>
-                <div class="second dreamBold blue bigFont">2교시</div>
-                <div class="third dreamBold blue bigFont">3교시</div>
+                <div class="dreamBold blue bigFont">1교시</div>
+                <div class="dreamBold blue bigFont">2교시</div>
+                <div class="dreamBold blue bigFont">3교시</div>
             </div>
             <div class="sizedBox firstSizedBox"></div>
-            <div class="clsOne cls">
-                <div class="first dreamBold blue bigFont"></div>
-                <div class="second dreamBold blue bigFont"></div>
-                <div class="third dreamBold blue bigFont"></div>
+            <div class="clsOne cls mainCls">
+                <div class="first dreamBold blue bigFont" id="room1_1"></div>
+                <div class="second dreamBold blue bigFont" id="room1_2"></div>
+                <div class="third dreamBold blue bigFont" id="room1_3"></div>
             </div>
             <div class="sizedBox"></div>
-            <div class="clsTwo cls">
-                <div class="first dreamBold blue bigFont"></div>
-                <div class="second dreamBold blue bigFont"></div>
-                <div class="third dreamBold blue bigFont"></div>
+            <div class="clsTwo cls mainCls">
+                <div class="first dreamBold blue bigFont" id="room2_1"></div>
+                <div class="second dreamBold blue bigFont" id="room2_2"></div>
+                <div class="third dreamBold blue bigFont" id="room2_3"></div>
             </div>
             <div class="sizedBox"></div>
-            <div class="clsThree cls">
-                <div class="first dreamBold blue bigFont"></div>
-                <div class="second dreamBold blue bigFont"></div>
-                <div class="third dreamBold blue bigFont"></div>
+            <div class="clsThree cls mainCls">
+                <div class="first dreamBold blue bigFont" id="room3_1"></div>
+                <div class="second dreamBold blue bigFont" id="room3_2"></div>
+                <div class="third dreamBold blue bigFont" id="room3_3"></div>
             </div>
             <div class="sizedBox"></div>
-            <div class="clsFour cls">
-                <div class="first dreamBold blue bigFont"></div>
-                <div class="second dreamBold blue bigFont"></div>
-                <div class="third dreamBold blue bigFont"></div>
+            <div class="clsFour cls mainCls">
+                <div class="first dreamBold blue bigFont" id="room4_1"></div>
+                <div class="second dreamBold blue bigFont" id="room4_2"></div>
+                <div class="third dreamBold blue bigFont" id="room4_3"></div>
             </div>
             <div class="sizedBox"></div>
-            <div class="clsFive cls">
-                <div class="first dreamBold blue bigFont"></div>
-                <div class="second dreamBold blue bigFont"></div>
-                <div class="third dreamBold blue bigFont"></div>
+            <div class="clsFive cls mainCls">
+                <div class="first dreamBold blue bigFont" id="room5_1"></div>
+                <div class="second dreamBold blue bigFont" id="room5_2"></div>
+                <div class="third dreamBold blue bigFont" id="room5_3"></div>
             </div>
             <div class="sizedBox"></div>
-            <div class="clsSix cls">
-                <div class="first dreamBold blue bigFont"></div>
-                <div class="second dreamBold blue bigFont"></div>
-                <div class="third dreamBold blue bigFont"></div>
+            <div class="clsSix cls mainCls">
+                <div class="first dreamBold blue bigFont" id="room6_1"></div>
+                <div class="second dreamBold blue bigFont" id="room6_2"></div>
+                <div class="third dreamBold blue bigFont" id="room6_3"></div>
             </div>
         </div>
     </div>
@@ -356,25 +352,37 @@
         - 17:00 이후 해당 날짜의 일정 변경은 불가합니다.
     </div>
     <div class="exbtn">
-        <img src="./image/rightFullArrow.png" class="apply headerMediumImg" data-bs-toggle="modal" data-bs-target="#applyModal">
+        <img id="applySeminar" src="./image/rightFullArrow.png" class="apply headerMediumImg">
         <div class="information">
             <div class="exInform"></div>
             <div class="expl mediumFont dreamBold blue">예약 마감</div>
         </div>
+        <div id="realBtn" data-bs-toggle="modal" data-bs-target="#applyModal"></div>
     </div>
     <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fs-5 dreamBold blue" id="appplyModalLabel">세미나실 신청 12.01</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title bigFont dreamBold blue" id="appplyModalLabel">세미나실 신청 12.01</h5>
+                    <img src="./image/close.png" class="btn-close headerSmallerImg" data-bs-dismiss="modal" aria-label="Close">
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div class="subtitle mediumFont dreamBold blue">명단</div>
+                    <div class="studentList">
+                        <div class="studentForm mediumFont dreamBold blue" id="student01">
+                            <div class="number">1</div>
+                            <input class="studentNumber input smallFont dream black" placeholder="학번(Ex. 10101)"></input>
+                            <input class="studentName input smallFont dream black" placeholder="이름(Ex. 홍길동)"></input>
+                            <div class="studentDelete" value=1></div>
+                        </div>
+                        <div class="addStudent">
+                            <div class="bigFont blue dreamBold">+</div>
+                        </div>
+                        <br><br>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <img src="./image/check.png" class="applyServer headerSmallerImg">
                 </div>
             </div>
         </div>

@@ -13,10 +13,17 @@ export const loading = (flag) => {
 }
 
 /**
- * 화면에 띄워야 하는 오류가 있을 때 message를 주면 띄워주는 함수
+ * 
+ * @param {Boolean} flag -> true는 info, false는 warning
+ * @param {String} message -> 출력할 message를 보냄
  */
-export const errorHandling = () => {
-    
+export const alarm = (flag=true, message="") => {
+    let tmp = (flag) ? document.getElementById("infoAlert") : document.getElementById("warnAlert");
+    tmp.innerText = message;
+    tmp.style = "display: block; opacity: 1;";
+    setTimeout(() => {
+        tmp.style = "display: none; opacity: 0;";
+    }, 3000);
 }
 
 /**

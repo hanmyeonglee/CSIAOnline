@@ -1,43 +1,37 @@
-import { getFetch, loading, getCookie, setCookie, postFetch } from "./utils.js";
+import { getFetch, postFetch, loading, getCookie, alarm } from "./utils.js";
 
-const base = "http://127.0.0.1:8000/";
 const mainpage = document.querySelector("div.mainpage");
 const desk_sidebar = document.querySelector("#desktop-sidebar");
 const cover = document.querySelector("div.cover");
-const dSch01 = document.querySelector("span#desktop-school01");
-const dSch02 = document.querySelector("span#desktop-school02");
-const dDor01 = document.querySelector("span#desktop-dormitory01");
-const dDor02 = document.querySelector("span#desktop-dormitory02");
-const dDor03 = document.querySelector("span#desktop-dormitory03");
-const lrModal = document.querySelector("div.lrModal");
-let session = getCookie("CSIAOnlineSession");
+const dtSch01 = document.querySelector("span#desktop-tschool01");
+const dtSch02 = document.querySelector("span#desktop-tschool02");
+const dtDor01 = document.querySelector("span#desktop-tdormitory01");
+const dtDor02 = document.querySelector("span#desktop-tdormitory02");
+const dtDor03 = document.querySelector("span#desktop-tdormitory03");
 let target = undefined;
 let recent_script = undefined;
 let version = {
-    dSch01: 0,
-    dSch02: 0,
-    dDor01: 0,
-    dDor02: 0,
-    dDor03: 0,
+    dtSch01: 0,
+    dtSch02: 0,
+    dtDor01: 0,
+    dtDor02: 0,
+    dtDor03: 0,
 }
 let isOpened = true;
+let session = getCookie("CSIAOnlineSession");
+let info = undefined;
 
-const pageSetter = async () => {
-    if(session){
-        let result = await postFetch(session, base + 'account/session', 'text/plain')
-        .then(async res => await res.json());
-    
-        if(result['result']){
-            lrModal.style = "display: none";
-            return;
-        }
+if(session){
+    let tmp = await postFetch(session, "http://127.0.0.1/account/user_inform", "text/plain")
+    .then(async res => res.json())
+    .catch(e => alarm(false, "서버와의 연결이 원활치 않습니다. 나중에 다시 시도해주십시오."));
+
+    if(tmp['result']){
+        info = tmp['content'];
+    } else {
+        alarm(false, tmp['content']);
     }
-
-    lrModal.style = "display: block";
-    document.querySelector("div.main").style = "filter: blur(5px); pointer-events: none; user-select: none;"
 }
-
-pageSetter();
 
 const removeScript = () => {
     if(recent_script != undefined){
@@ -80,16 +74,37 @@ document.getElementById("desktop-list").addEventListener('click', (e) => {
     isOpened = !isOpened;
 });
 
-dSch01.addEventListener("click", (e) => {
-    fetchPage(e, "dSch01");
+dtSch01.addEventListener("click", (e) => {
+    if(info){
+        if(info['auth'].substr(6, 2) != "00"){
+            fetchPage(e, "dtSch01");
+            return;
+        }
+    }
+
+    alarm(false, "로그인이 필요합니다.");
 })
 
-dSch02.addEventListener("click", (e) => {
-    fetchPage(e, "dSch02");
+dtSch02.addEventListener("click", (e) => {
+    if(info){
+        if(info['auth'][7] == "1"){
+            fetchPage(e, "dtSch02");
+            return;
+        }
+    }
+
+    alarm(false, "로그인이 필요합니다.");
 })
 
-dDor01.addEventListener("click", (e) => {
-    fetchPage(e, "dDor01");
+dtDor01.addEventListener("click", (e) => {
+    if(info){
+        if(info['auth'][6] != "1"){
+            fetchPage(e, "dtDor01");
+            return;
+        }
+    }
+
+    alarm(false, "로그인이 필요합니다.");
 })
 
 document.querySelector("div.rightHeaderSecond").addEventListener("click", async (e) => {

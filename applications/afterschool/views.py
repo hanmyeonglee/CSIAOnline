@@ -3,10 +3,15 @@ from .models import *
 from .multi_handler import *
 from account.models import LoginSession
 from datetime import datetime, timedelta
-from dormitory.views import verify_date
+from dormitory.views import verify_date, now
+from re import fullmatch
 import json
 
 from django.views.decorators.csrf import csrf_exempt
+
+
+def auth_binarify(auth):
+    return bin(auth)[2:].ljust(8, '0')
 
 
 def afterschooluser_default_generator(user: User):
@@ -43,6 +48,12 @@ def userweekschedule_default_generator(afterschool_user: AfterSchoolUser, date: 
 
     else:
         return tar
+
+
+def seminarroombook_default_generator(date: datetime):
+    tmp = SeminarRoomBook(date=date)
+    tmp.save()
+    return tmp
 
 
 @csrf_exempt
@@ -184,7 +195,7 @@ def get_week_schedule(request: HttpRequest):
                 if res:
                     user = login_session.user
 
-                    if user.auth == 0:
+                    if auth_binarify(user.auth) == "00000000":
                         users = AfterSchoolUser.objects.filter(user=user)
                         content = {
                             "mon": None,
@@ -269,7 +280,7 @@ def set_fixed_schedule(request: HttpRequest):
                     user = login_session.user
                     # afterschoolUser에서 유저를 받아와 그걸 다시 UserWeekSchedule에서 찾아야함
 
-                    if user.auth == 0:
+                    if auth_binarify(user.auth) == "00000000":
                         users = AfterSchoolUser.objects.filter(user=user)
 
                         if len(users) != 1:
@@ -342,7 +353,7 @@ def set_schedule(request: HttpRequest):
                     user = login_session.user
                     # afterschoolUser에서 유저를 받아와 그걸 다시 UserWeekSchedule에서 찾아야함
 
-                    if user.auth == 0:
+                    if auth_binarify(user.auth) == "00000000":
                         users = AfterSchoolUser.objects.filter(user=user)
 
                         if len(users) == 1:
@@ -417,7 +428,7 @@ def get_all_schedule(request: HttpRequest):
             if res:
                 user = login_session.user
 
-                if user.auth >= 1:
+                if auth_binarify(user.auth)[7] == "1":
                     students = UserWeekSchedule.objects.filter(date=date)
                     content = []
 
@@ -428,7 +439,7 @@ def get_all_schedule(request: HttpRequest):
                         tmp['seat_number'] = seat_number[0] if len(
                             seat_number) == 1 else -1
                         content.append({
-                            "student": tmp,  # 여기 정보에 seat_number 있어야 하는데;
+                            "student": tmp,
                             "schedule": student.jsonify(),
                         })
 
@@ -473,7 +484,7 @@ def set_student_participate(request: HttpRequest):
                 if res:
                     user = login_session.user
 
-                    if user.auth >= 1:
+                    if auth_binarify(user.auth)[7] == "1":
                         student = UserWeekSchedule.objects.filter(
                             id=id, date=date)
 
@@ -494,6 +505,131 @@ def set_student_participate(request: HttpRequest):
 
         else:
             content = "invalid request content_type"
+
+    else:
+        content = "invalid request method"
+
+    return HttpResponse(json.dumps({
+        "result": result,
+        "content": content,
+    }))
+
+
+@csrf_exempt
+def set_seminar_schedule(request: HttpRequest):
+    """
+    {
+        session: ~,
+        schedule: [room1~6_1~3, {
+            grade: ~,
+            classroom: ~,
+            number: ~,
+            name: ~,
+        } ... ]
+    }
+    """
+    result, content = False, ""
+    pattern = r"room[1-6]_[1-3]$"
+
+    if request.method == "POST":
+        flag = True
+        try:
+            recv = json.loads(request.body)
+            session, schedule = recv['session'], recv['schedule']
+            roomNs, book = schedule[0], schedule[1:]
+        except:
+            content = "invalid data organization"
+            flag = False
+
+        for roomN in roomNs:
+            match = fullmatch(pattern, roomN)
+
+        if not match:
+            content = "invalid room number"
+            flag = False
+
+        n = now()
+        bookList = SeminarRoomBook.objects.filter(date=n)
+
+        if bookList.exists():
+            bookList = bookList[0]
+
+            for roomN in roomNs:
+                if bool(getattr(bookList, roomN)):
+                    flag = False
+                    content = "already booked room"
+
+        else:
+            bookList = seminarroombook_default_generator(date=n)
+
+        if flag:
+            res, login_session = multi_session(
+                LoginSession.objects.filter(session=session))
+
+            if res:
+                user = login_session.user
+
+                if auth_binarify(user.auth) == "00000000":
+                    users = []
+                    try:
+                        for info in book:
+                            grade, classroom, number, name = \
+                                info['grade'], info['classroom'], \
+                                info['number'], info['name']
+
+                            user = User.objects.filter(
+                                name=name, grade=grade,
+                                classroom=classroom, number=number,
+                            )
+
+                            if user.exists():
+                                users.append(str(user[0].id))
+
+                            else:
+                                content = "invalid user information"
+                                flag = False
+                                break
+                    except:
+                        content = "invalid data organization (2)"
+                        flag = False
+
+                    if flag:
+                        for roomN in roomNs:
+                            setattr(bookList, roomN, f"{'/'.join(users)}=0")
+
+                        bookList.save()
+                        result = True
+
+                else:
+                    content = "invalid auth"
+
+            else:
+                content = login_session
+
+    else:
+        content = "invalid request method"
+
+    return HttpResponse(json.dumps({
+        "result": result,
+        "content": content,
+    }))
+
+
+@csrf_exempt
+def get_simple_seminar_schedule(request: HttpRequest):
+    result, content = False, ""
+    if request.method == "GET":
+        n = now()
+        schedule = SeminarRoomBook.objects.filter(date=n)
+
+        if schedule.exists():
+            schedule = schedule[0]
+
+        else:
+            schedule = seminarroombook_default_generator(date=n)
+
+        content = schedule.simple_jsonify()
+        result = True
 
     else:
         content = "invalid request method"

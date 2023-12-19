@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheongShim Online</title>
+    <link rel="icon" href="./image/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/login.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+    <div class="desktop main">
+        <div class="header">
+            <div class="rightHeader">
+                <div class="rightHeaderFirst">
+                    <img src="./image/list.png" class="sidebar-list" id="desktop-list">
+                </div>
+                <div class="rightHeaderSecond">
+                    <img src="./image/favicon.png" class="headerBiggerImg">
+                    <img src="./image/CSIA Online_CSIAOnline.png" class="headerBigImg">
+                </div>
+            </div>
+            <div class="leftHeader">
+                <div class="userIcon">
+                    <img src="./image/사람.png" class="headerMediumImg">
+                </div>
+                <div class="userName dream mediumFont">
+                    이종원
+                </div>
+                <div class="userSetting">
+                    <img src="./image/chevron-down.png" class="headerSmallerImg">
+                </div>
+            </div>
+        </div>
+        <div class="cover">
+            <div class="sidebar" id="desktop-sidebar">
+                <div class="flex-shrink-0 p-13">
+                    <ul class="list-unstyled ps-0">
+                        <li class="mb-1">
+                            <button class="p-13 sidebarBtn btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dreamBold mediumFont" data-bs-toggle="collapse" data-bs-target="#school" aria-expanded="false">
+                                <img src="./image/학교 내.png">
+                                <span class="dreamBold blue">학교 내</span>
+                            </button>
+                            <div class="collapse" id="school">
+                                <ul class="sidebarSubList btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                    <li class="link-body-emphasis text-decoration-none rounded dream smallFont">
+                                        <img src="./image/야자_black.png" class="headerSmallImg">
+                                        <span id="desktop-school01">야간 자율 학습 신청</sapn>
+                                    </li>
+                                    <li class="link-body-emphasis text-decoration-none rounded dream smallFont">
+                                        <img src="./image/세미나실_black.png" class="headerSmallImg">
+                                        <span id="desktop-school02">세미나실 신청</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <br>
+                        <li class="mb-1">
+                            <button class="p-13 sidebarBtn btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dreamBold mediumFont" data-bs-toggle="collapse" data-bs-target="#dormitory" aria-expanded="false">
+                                <img src="./image/기숙사.png">
+                                <span class="dreamBold blue">기숙사</span>
+                            </button>
+                            <div class="collapse" id="dormitory">
+                                <ul class="sidebarSubList btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                    <li class="link-body-emphasis text-decoration-none rounded dream smallFont">
+                                        <img src="./image/야자_black.png" class="headerSmallImg">
+                                        <span id="desktop-dormitory01">야자 4교시 신청</span>
+                                    </li>
+                                    <li class="link-body-emphasis text-decoration-none rounded dream smallFont">
+                                        <img src="./image/수리_black.png" class="headerSmallImg">
+                                        <span id="desktop-dormitory02">이것 좀 고쳐주세요</span>
+                                    </li>
+                                    <li class="link-body-emphasis text-decoration-none rounded dream smallFont">
+                                        <img src="./image/노래방_black.png" class="headerSmallImg">
+                                        <span id="desktop-dormitory03">노래방</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mainpage">
+                <img src="./image/배경화면.png" style="width: 100%; position: relative; top: -15%;">
+            </div>
+        </div>
+    </div>
+    <div class="lrModal" style="display: none;">
+        <div class="login setup">
+            <img src="./image/CSIA Online_CSIAOnline.png" class="loginImg">
+            <div class="inputId input">
+                <img src="./image/사람.png" class="headerSmallImg">
+                <input type="text" class="inp id dreamBold blue" placeholder="학번을 입력하세요...">
+            </div>
+            <div class="inputPw input">
+                <img src="./image/key.png" class="headerSmallImg">
+                <input type="text" class="inp pw dreamBold blue" placeholder="비밀번호를 입력하세요...">
+            </div>
+            <div class="loginBtn">
+                <div class="dreamBold blue">로그인</div>
+            </div>
+            <div class="hr"></div>
+            <div class="registerBtn">
+                <div class="dreamBold">회원가입</div>
+            </div>
+        </div>
+        <div class="register setup" style="display: none;">
+            <img src="./image/leftArrow.png" class="backImg">
+            <img src="./image/CSIA Online_CSIAOnline.png" class="loginImg">
+            <div class="inputId input">
+                <img src="./image/사람.png" class="headerSmallImg">
+                <input type="text" class="inp id dreamBold blue" placeholder="학번을 입력하세요...">
+            </div>
+            <div class="inputPw input">
+                <img src="./image/key.png" class="headerSmallImg">
+                <input type="text" class="inp pw dreamBold blue" placeholder="비밀번호를 입력하세요...">
+            </div>
+            <div class="inputName input">
+                <img src="./image/name.png" class="headerSmallImg">
+                <input type="text" class="inp name dreamBold blue" placeholder="이름을 입력하세요...">
+            </div>
+            <div class="registerServer">
+                <div class="dreamBold blue">회원가입</div>
+            </div>
+        </div>
+    </div>
+    <div class="loader" id="loader" style="display: none;">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="alert alert-info dreamBold black" id="infoAlert" role="alert"></div>
+    <div class="alert alert-warning dreamBold black" id="warnAlert" role="alert"></div>
+    <script>
+        window.onload = () => {for(let btn of document.querySelectorAll("button.p-13.sidebarBtn")) btn.click();}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script type="module" src="./javascript/utils.js"></script>
+    <script type="module" src="./javascript/main.js"></script>
+    <script type="module" src="./javascript/login.js"></script>
+</body>
+</html>

@@ -12,4 +12,7 @@ urlpatterns = [
     path("temp", views.set_schedule, name="temp_schedule"),
     path("all_schedules", views.get_all_schedule, name="get_all_schedules"),
     path("participate", views.set_student_participate, name="student_participate"),
+    path("set_seminar", views.set_seminar_schedule, name="set_seminar_schedule"),
+    path("get_simple_seminar", views.get_simple_seminar_schedule,
+         name="get_simple_seminar_schedule"),
 ]

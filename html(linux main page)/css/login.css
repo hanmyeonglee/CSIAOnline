@@ -1,0 +1,131 @@
+.lrModal{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 30vw;
+    height: 70vh;
+    border: 1px solid #06469B;
+    background-color: white;
+    border-radius: 1.5vw;
+}
+
+.setup{
+    padding-left: 2.7vw;
+    padding-right: 2.7vw;
+    padding-top: 7vh;
+}
+
+.setup > .backImg{
+    position: absolute;
+    top: 4%;
+    left: 6%;
+    width: 3vw;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.setup > .backImg:hover{
+    opacity: 1;
+}
+
+.setup > .loginImg{
+   width: 21vw;
+   margin-bottom: 8vh;
+}
+
+.setup > .input{
+    width: 24.6vw;
+    border-bottom: 1px solid #06469B;
+    padding: 2px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    margin-bottom: 4vh;
+}
+
+.setup > .input > img{
+    opacity: 0.5;
+    place-self: center center;
+}
+
+.setup > .input > .inp{
+    width: 100%;
+    background-color: white;
+    border: none;
+    font-size: 1rem;
+}
+
+.setup > .input > .inp:focus{
+    outline: none !important;
+}
+
+.setup > .loginBtn, .setup > .registerBtn{
+    width: 20vw;
+    height: fit-content;
+    margin: auto;
+    border: 1px solid #06469B;
+    border-radius: 2vw;
+    background-color: #F3F8FF;
+    cursor: pointer;
+    user-select: none;
+    padding-top: .8vh;
+    padding-bottom: .8vh;
+}
+
+.setup > .loginBtn > div, .setup > .registerBtn > div{
+    width: fit-content;
+    height: fit-content;
+    font-size: 1rem;
+    margin: auto;
+}
+
+.setup > .loginBtn:hover{
+    background-color: white;
+}
+
+.setup > .hr{
+    margin: auto;
+    margin-top: 12vh;
+    margin-bottom: 4vh;
+    height: 0px;
+    width: 60%;
+    border-bottom: 1px solid #06469B;
+}
+
+.setup > .registerBtn{
+    background-color: #06469B;
+}
+
+.setup > .registerBtn > div{
+    color: white;
+}
+
+.setup > .registerBtn:hover{
+    background-color: #3b69a6;
+}
+
+.register > .registerServer{
+    width: 20vw;
+    height: fit-content;
+    margin: auto;
+    margin-top: 10vh;
+    border: 1px solid #06469B;
+    border-radius: 2vw;
+    background-color: #F3F8FF;
+    cursor: pointer;
+    user-select: none;
+    padding-top: .8vh;
+    padding-bottom: .8vh;
+}
+
+.register > .registerServer > div{
+    width: fit-content;
+    height: fit-content;
+    font-size: 1rem;
+    margin: auto;
+}
+
+.register > .registerServer:hover{
+    background-color: white;
+}
