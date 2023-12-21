@@ -26,6 +26,9 @@
 .black{
     color: #042047 !important;
 }
+.white{
+    color: white !important;
+}
 
 html, body, .main{
     overflow: hidden;

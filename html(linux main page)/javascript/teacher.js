@@ -8,6 +8,7 @@ const dtSch02 = document.querySelector("span#desktop-tschool02");
 const dtDor01 = document.querySelector("span#desktop-tdormitory01");
 const dtDor02 = document.querySelector("span#desktop-tdormitory02");
 const dtDor03 = document.querySelector("span#desktop-tdormitory03");
+const lrModal = document.querySelector("div.lrModal");
 let target = undefined;
 let recent_script = undefined;
 let version = {
@@ -21,17 +22,22 @@ let isOpened = true;
 let session = getCookie("CSIAOnlineSession");
 let info = undefined;
 
-if(session){
-    let tmp = await postFetch(session, "http://127.0.0.1/account/user_inform", "text/plain")
-    .then(async res => res.json())
-    .catch(e => alarm(false, "서버와의 연결이 원활치 않습니다. 나중에 다시 시도해주십시오."));
+const setting = async () => {
+    if(session){
+        let tmp = await postFetch(session, "http://127.0.0.1/account/user_inform", "text/plain")
+        .then(async res => res.json())
+        .catch(e => {return {'result': false, 'content': "서버와의 연결이 원활치 않습니다. 나중에 다시 시도해주십시오."};});
 
-    if(tmp['result']){
-        info = tmp['content'];
-    } else {
-        alarm(false, tmp['content']);
+        if(tmp['result']){
+            info = tmp['content'];
+        } else {
+            alarm(false, tmp['content']);
+            lrModal.style = "display: block";
+        }
     }
 }
+
+//setting();
 
 const removeScript = () => {
     if(recent_script != undefined){

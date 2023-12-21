@@ -91,7 +91,60 @@ def login(request: HttpRequest):
             if flag:
                 user = User.objects.filter(user_id=id, password=pw)
 
-                if len(user) == 1:
+                if user.exists():
+                    user = user[0]
+
+                    if auth_binarify(user.auth)[7] == "1":
+                        result = True
+                        content = generate()
+                        session = LoginSession(
+                            user=user, session=content, allot_time=datetime.now(timezone('Asia/Seoul')))
+                        session.save()
+
+                    else:
+                        content = "invalid auth"
+
+                else:
+                    content = "invalid id or password"
+
+        else:
+            content = "invalid data type"
+
+    else:
+        content = "invalid request method"
+
+    return HttpResponse(json.dumps({
+        "result": result,
+        "content": content,
+    }))
+
+
+@csrf_exempt
+def tlogin(request: HttpRequest):
+    """
+    로그인하는 함수, 성공하면 세션을 등록한다.\n
+    실패하면 False
+    """
+    result, content = False, ""
+
+    if request.method == 'POST':
+        ct = request.content_type
+
+        if 'application/json' in ct:
+            flag = True
+            try:
+                input_login_information = json.loads(request.body)
+                id, pw = input_login_information['id'], hash256(
+                    input_login_information['pw'].encode())
+            except:
+                content = "invalid data organization"
+                flag = False
+
+            if flag:
+                user = User.objects.filter(user_id=id, password=pw)
+
+                if user.exists():
+
                     result = True
                     user = user[0]
                     content = generate()

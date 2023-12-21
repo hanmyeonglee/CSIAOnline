@@ -1,4 +1,4 @@
-import { alarm, postFetch, setCookie } from './utils.js';
+import { alarm, postFetch, setCookie, loading } from './utils.js';
 
 const base = "http://127.0.0.1:8000/";
 const main = document.querySelector("div.login");
@@ -15,6 +15,8 @@ const registerServer = register.querySelector("div.registerServer");
 const backBtn = register.querySelector("img.backImg");
 
 loginBtn.addEventListener("click", async (e) => {
+    loading(true);
+
     e.target.style = "pointer-events: none;";
 
     let regex = /^[1-3]0[1-4][0-2][0-9]/;
@@ -24,11 +26,13 @@ loginBtn.addEventListener("click", async (e) => {
     if(!regex.test(idv)){
         alarm(false, "id를 다시 입력해주십시오.");
         e.target.style = "pointer-events: all;";
+        loading(false);
         return;
     }
     else if(!pwv){
         alarm(false, "비밀번호를 입력해주십시오.");
         e.target.style = "pointer-events: all;";
+        loading(false);
         return;
     }
 
@@ -54,6 +58,7 @@ loginBtn.addEventListener("click", async (e) => {
 
     document.querySelector("div.main").style = "filter: none; pointer-events: all; user-select: auto;";
     document.querySelector("div.lrModal").style = "display: none";
+    loading(false);
 
     return;
 });
@@ -64,6 +69,8 @@ registerBtn.addEventListener("click", (e) => {
 });
 
 registerServer.addEventListener("click", async (e) => {
+    loading(true);
+
     e.target.style = "pointer-events: none;";
 
     let regex = /^[1-3]0[1-4][0-2][0-9]/;
@@ -78,16 +85,19 @@ registerServer.addEventListener("click", async (e) => {
     if(!regex.test(snumber)){
         alarm(false, "id를 다시 입력해주십시오.");
         e.target.style = "pointer-events: all;";
+        loading(false);
         return;
     }
     else if(!ppw){
         alarm(false, "비밀번호를 입력해주십시오.");
         e.target.style = "pointer-events: all;";
+        loading(false);
         return;
     }
     else if(!name){
         alarm(false, "이름을 입력해주십시오.");
         e.target.style = "pointer-events: all;";
+        loading(false);
         return;
     }
     else{
@@ -111,6 +121,7 @@ registerServer.addEventListener("click", async (e) => {
     if(!result['result']){
         alarm(false, result['content']);
         e.target.style = "pointer-events: all;";
+        loading(false);
         return;
     }
     else{
@@ -123,6 +134,7 @@ registerServer.addEventListener("click", async (e) => {
 
     main.style = "display: block";
     register.style = "display: none";
+    loading(false);
 
     return;
 })

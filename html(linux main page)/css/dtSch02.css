@@ -1,0 +1,78 @@
+.dtSch02Cover{
+    width: 100%;
+    height: 100%;
+    padding-right: 5vw;
+    padding-left: 5vw;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+}
+
+.dtSch02{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.dtSch02 > .title{
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    margin-bottom: 9vh;
+}
+
+.dtSch02 > .oneRow{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 5vw;
+    margin-bottom: 5vh;
+}
+
+.dtSch02 > .oneRow > .box{
+    border: 1px solid #06469B;
+    padding-right: 1.2vw;
+    padding-left: 1.2vw;
+    padding-top: 1.2vh;
+    padding-bottom: 1.2vh;
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    column-gap: 1vw;
+}
+
+.dtSch02 .checklist{
+    display: grid;
+    grid-template-columns: auto repeat(2, 1fr);
+}
+
+.dtSch02 .btns{
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    column-gap: 3vh;
+    padding: 10px;
+}
+
+.dtSch02 .btns > div{
+    width: 100%;
+    height: fit-content;
+    border: 1px solid black;
+    place-self: center center;
+    padding: 3px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dtSch02 .btns > .allow{
+    background-color: black;
+    color: white;
+}
+
+.dtSch02 .btns > .allow:hover{
+    background-color: white;
+    color: black;
+}
+
+.dtSch02 .btns > .reject:hover{
+    background-color: black;
+    color: white;
+}
